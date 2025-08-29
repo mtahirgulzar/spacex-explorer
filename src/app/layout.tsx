@@ -23,6 +23,10 @@ export const metadata: Metadata = {
   description: "Explore SpaceX launches, rockets, and missions. Track upcoming launches and dive deep into space exploration data.",
   keywords: ["SpaceX", "rockets", "launches", "space exploration", "Falcon 9", "Dragon"],
   authors: [{ name: "SpaceX Explorer Team" }],
+  icons: {
+    icon: '/spacex.svg',
+    apple: '/spacex.svg',
+  },
   openGraph: {
     title: "SpaceX Explorer | Discover Space Missions",
     description: "Explore SpaceX launches, rockets, and missions. Track upcoming launches and dive deep into space exploration data.",
