@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const apiClient = axios.create({
-  baseURL: 'https://api.spacexdata.com/v4',
+  baseURL: process.env.NEXT_PUBLIC_SPACEX_API_BASE_URL || 'https://api.spacexdata.com/v4',
   timeout: 30000,
   headers: {
     'Content-Type': 'application/json',
