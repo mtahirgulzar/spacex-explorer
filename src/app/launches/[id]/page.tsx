@@ -13,7 +13,6 @@ import {
   FavoriteButton
 } from '@/components';
 import { useLaunchById, useRocketById, useLaunchpadById } from '@/lib/queries/launches';
-import { Payload } from '@/lib/types';
 import { 
   ArrowLeft,
   Calendar,
@@ -40,7 +39,6 @@ import {
   Radio,
   Settings,
   Activity,
-  Orbit,
   Building,
   Navigation,
   Timer,
