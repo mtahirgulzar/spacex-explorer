@@ -25,11 +25,10 @@ const eslintConfig = [
   },
   {
     rules: {
-      // Basic rules that work with Next.js flat config
-      "no-unused-vars": "error",
+      "no-unused-vars": ["error", { "argsIgnorePattern": "^_", "varsIgnorePattern": "^_" }],
+      "@typescript-eslint/no-unused-vars": ["error", { "argsIgnorePattern": "^_", "varsIgnorePattern": "^_" }],
       "no-console": process.env.NODE_ENV === "production" ? "error" : "warn",
       "prefer-const": "error",
-      // React specific rules
       "react-hooks/exhaustive-deps": "error",
       "react/display-name": "error",
       "react/jsx-key": "error",

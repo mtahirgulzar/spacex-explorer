@@ -1,9 +1,9 @@
 import { apiRequest } from '../client';
 import { API_ENDPOINTS } from '../endpoints';
-import { Rocket } from '../../types';
+import { Rocket, ApiConfig } from '../../types';
 
 export const rocketService = {
-  getAllRockets: async (config?: any): Promise<Rocket[]> => {
+  getAllRockets: async (config?: ApiConfig): Promise<Rocket[]> => {
     const { data } = await apiRequest.get<Rocket[]>(
       API_ENDPOINTS.ROCKETS.GET_ALL,
       config
@@ -11,7 +11,7 @@ export const rocketService = {
     return data;
   },
 
-  getRocketById: async (id: string, config?: any): Promise<Rocket> => {
+  getRocketById: async (id: string, config?: ApiConfig): Promise<Rocket> => {
     const { data } = await apiRequest.get<Rocket>(
       API_ENDPOINTS.ROCKETS.GET_BY_ID(id),
       config
@@ -19,7 +19,7 @@ export const rocketService = {
     return data;
   },
 
-  getActiveRockets: async (config?: any): Promise<Rocket[]> => {
+  getActiveRockets: async (config?: ApiConfig): Promise<Rocket[]> => {
     const { data } = await apiRequest.get<Rocket[]>(
       `${API_ENDPOINTS.ROCKETS.GET_ALL}?active=true`,
       config
@@ -27,7 +27,7 @@ export const rocketService = {
     return data;
   },
 
-  searchRockets: async (searchTerm: string, config?: any): Promise<Rocket[]> => {
+  searchRockets: async (searchTerm: string, config?: ApiConfig): Promise<Rocket[]> => {
     const rockets = await rocketService.getAllRockets(config);
     return rockets.filter(rocket => 
       rocket.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -36,7 +36,7 @@ export const rocketService = {
     );
   },
 
-  getRockets: async (config?: any): Promise<Rocket[]> => {
+  getRockets: async (config?: ApiConfig): Promise<Rocket[]> => {
     return rocketService.getAllRockets(config);
   },
 };

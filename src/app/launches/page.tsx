@@ -1,231 +1,347 @@
 'use client';
 
-import React, { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import React, { useState, useEffect, useCallback, useMemo, Suspense } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
+import Link from 'next/link';
+import { useInView } from 'react-intersection-observer';
 import { 
   Typography, 
   Button, 
-  Skeleton, 
   Card, 
-  CardContent
-} from '@/components';
-import { LaunchCard, LaunchFiltersBar } from '@/components/molecules';
-import { useLaunchQuery } from '@/lib/hooks/useLaunches';
-import { LaunchFilters, Launch } from '@/lib/types';
-import { Rocket, AlertCircle, RefreshCw } from 'lucide-react';
 
-const INITIAL_FILTERS: LaunchFilters = {
-  page: 1,
+  Input,
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue
+} from '@/components';
+import { LaunchCard } from '@/components/molecules';
+import { useInfiniteLaunches } from '@/lib/queries/launches';
+import { LaunchFilters, Launch, LaunchQueryResponse } from '@/lib/types';
+import { 
+  Search, 
+  Calendar,
+  Loader2,
+  AlertCircle,
+  RefreshCw,
+  X
+} from 'lucide-react';
+
+const INITIAL_FILTERS: Omit<LaunchFilters, 'page'> = {
   limit: 12,
   sortBy: 'date_utc',
   sortOrder: 'desc',
 };
 
-export default function LaunchesPage() {
+const BOOLEAN_PARAM_MAP = {
+  upcoming: { true: true, false: false },
+  success: { true: true, false: false }
+} as const;
+
+const SORT_PARAM_MAP = {
+  sortBy: ['date_utc', 'name', 'flight_number'] as const,
+  sortOrder: ['asc', 'desc'] as const
+} as const;
+
+const parseUrlFilters = (searchParams: URLSearchParams) => {
+  const urlFilters: Partial<Omit<LaunchFilters, 'page'>> = { ...INITIAL_FILTERS };
+  
+  Object.entries(BOOLEAN_PARAM_MAP).forEach(([key, valueMap]) => {
+    const param = searchParams.get(key);
+    if (param && param in valueMap) {
+      urlFilters[key as keyof typeof BOOLEAN_PARAM_MAP] = valueMap[param as keyof typeof valueMap];
+    }
+  });
+
+  const sortBy = searchParams.get('sortBy');
+  if (sortBy && SORT_PARAM_MAP.sortBy.includes(sortBy as typeof SORT_PARAM_MAP.sortBy[number])) {
+    urlFilters.sortBy = sortBy as typeof SORT_PARAM_MAP.sortBy[number];
+  }
+
+  const sortOrder = searchParams.get('sortOrder');
+  if (sortOrder && SORT_PARAM_MAP.sortOrder.includes(sortOrder as typeof SORT_PARAM_MAP.sortOrder[number])) {
+    urlFilters.sortOrder = sortOrder as typeof SORT_PARAM_MAP.sortOrder[number];
+  }
+
+  return urlFilters;
+};
+
+function LaunchesContent() {
   const router = useRouter();
-  const [filters, setFilters] = useState<LaunchFilters>(INITIAL_FILTERS);
-  const [favorites, setFavorites] = useState<Set<string>>(new Set());
+  const searchParams = useSearchParams();
+  const [filters, setFilters] = useState<Omit<LaunchFilters, 'page'>>(INITIAL_FILTERS);
+  const [debouncedSearch, setDebouncedSearch] = useState('');
+  const [searchInput, setSearchInput] = useState('');
+
+  const { ref: loadMoreRef, inView } = useInView({
+    threshold: 0,
+    rootMargin: '100px',
+  });
 
   const { 
-    data: launchData, 
+    data,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
     isLoading, 
-    error, 
-    refetch,
-    isRefetching 
-  } = useLaunchQuery(filters);
+    isError,
+    refetch
+  } = useInfiniteLaunches(
+    debouncedSearch 
+      ? { ...filters, search: debouncedSearch }
+      : filters
+  );
 
-  // Load favorites from localStorage
-  React.useEffect(() => {
-    try {
-      const savedFavorites = localStorage.getItem('spacex-favorites');
-      if (savedFavorites) {
-        setFavorites(new Set(JSON.parse(savedFavorites)));
-      }
-    } catch (error) {
-      // console.error('Failed to load favorites:', error);
+  useEffect(() => {
+    const urlFilters = parseUrlFilters(searchParams);
+    setFilters(urlFilters as Omit<LaunchFilters, 'page'>);
+
+    const search = searchParams.get('search');
+    if (search) {
+      setSearchInput(search);
+      setDebouncedSearch(search);
     }
+  }, [searchParams]);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedSearch(searchInput);
+    }, 500);
+    return () => clearTimeout(timer);
+  }, [searchInput]);
+
+  useEffect(() => {
+    if (inView && hasNextPage && !isFetchingNextPage) {
+      fetchNextPage();
+    }
+  }, [inView, hasNextPage, isFetchingNextPage, fetchNextPage]);
+
+  const handleFilterChange = useCallback((key: keyof typeof filters, value: LaunchFilters[keyof LaunchFilters]) => {
+    setFilters(prev => ({
+      ...prev,
+      [key]: value,
+    }));
   }, []);
 
-  // Save favorites to localStorage
-  const saveFavorites = (newFavorites: Set<string>) => {
-    try {
-      localStorage.setItem('spacex-favorites', JSON.stringify([...newFavorites]));
-      setFavorites(newFavorites);
-    } catch (error) {
-      // console.error('Failed to save favorites:', error);
-    }
-  };
+  const clearFilters = useCallback(() => {
+    setFilters(INITIAL_FILTERS);
+    setSearchInput('');
+    setDebouncedSearch('');
+  }, []);
 
-  const handleToggleFavorite = (launchId: string) => {
-    const newFavorites = new Set(favorites);
-    if (newFavorites.has(launchId)) {
-      newFavorites.delete(launchId);
-    } else {
-      newFavorites.add(launchId);
-    }
-    saveFavorites(newFavorites);
-  };
-
-  const handleViewDetails = (launchId: string) => {
+  const handleLaunchClick = useCallback((launchId: string) => {
     router.push(`/launches/${launchId}`);
-  };
+  }, [router]);
 
-  const handleLoadMore = () => {
-    if (launchData?.hasNextPage) {
-      setFilters(prev => ({
-        ...prev,
-        page: (prev.page || 1) + 1
-      }));
-    }
-  };
+  const memoizedData = useMemo(() => {
+    const dataPages = (data as { pages?: LaunchQueryResponse[] })?.pages;
+    return {
+      allLaunches: dataPages?.flatMap((page: LaunchQueryResponse) => page.docs) ?? [],
+      totalResults: dataPages?.[0]?.totalDocs ?? 0,
+      hasLoadedData: !!dataPages && dataPages.length > 0
+    };
+  }, [data]);
 
-  const totalLaunches = launchData?.totalDocs || 0;
-  const currentLaunches = launchData?.docs || [];
+  const activeFiltersCount = useMemo(() => {
+    const filterChecks = [
+      filters.upcoming !== undefined,
+      filters.success !== undefined,
+      !!debouncedSearch,
+      filters.sortBy !== INITIAL_FILTERS.sortBy || filters.sortOrder !== INITIAL_FILTERS.sortOrder
+    ];
+    return filterChecks.filter(Boolean).length;
+  }, [filters.upcoming, filters.success, debouncedSearch, filters.sortBy, filters.sortOrder]);
 
-  const LoadingSkeleton = () => (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-      {Array.from({ length: 12 }).map((_, i) => (
-        <Card key={i} className="h-80">
-          <CardContent className="p-6">
-            <div className="space-y-4">
-              <div className="flex justify-between items-start">
-                <Skeleton className="h-6 w-3/4" />
-                <Skeleton className="h-6 w-16" />
-              </div>
-              <Skeleton className="h-4 w-20" />
-              <div className="space-y-2">
-                <Skeleton className="h-4 w-full" />
-                <Skeleton className="h-4 w-full" />
-                <Skeleton className="h-4 w-2/3" />
-              </div>
-              <Skeleton className="h-20 w-full" />
-              <div className="flex justify-between items-center">
-                <Skeleton className="h-12 w-12 rounded-lg" />
-                <Skeleton className="h-9 w-24" />
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-      ))}
-    </div>
-  );
-
-  const ErrorState = () => (
-    <Card className="text-center py-12">
-      <CardContent>
+  if (isError) {
+    return (
+      <div className="min-h-screen bg-gray-50 p-6">
+        <div className="max-w-4xl mx-auto">
+          <Card className="p-8 text-center">
         <AlertCircle className="h-12 w-12 text-red-500 mx-auto mb-4" />
-        <Typography variant="h4" className="mb-2">
-          Failed to load launches
+            <Typography variant="h3" className="mb-2">Failed to load launches</Typography>
+            <Typography variant="body1" className="text-gray-600 mb-6">
+              We couldn&apos;t load the launches data. Please check your connection and try again.
         </Typography>
-        <Typography variant="body1" color="muted" className="mb-6">
-          There was an error loading the launches. Please try again.
-        </Typography>
-        <Button onClick={() => refetch()} disabled={isRefetching} className="gap-2">
-          <RefreshCw className={`h-4 w-4 ${isRefetching ? 'animate-spin' : ''}`} />
-          {isRefetching ? 'Retrying...' : 'Try again'}
+            <Button onClick={() => refetch()} className="gap-2 cursor-pointer">
+              <RefreshCw className="h-4 w-4" />
+              Try Again
         </Button>
-      </CardContent>
     </Card>
-  );
-
-  const EmptyState = () => (
-    <Card className="text-center py-12">
-      <CardContent>
-        <Rocket className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-        <Typography variant="h4" className="mb-2">
-          No launches found
-        </Typography>
-        <Typography variant="body1" color="muted" className="mb-6">
-          No launches match your current filters. Try adjusting your search criteria.
-        </Typography>
-        <Button 
-          variant="outline" 
-          onClick={() => setFilters(INITIAL_FILTERS)}
-        >
-          Clear filters
-        </Button>
-      </CardContent>
-    </Card>
-  );
+        </div>
+      </div>
+    );
+  }
 
   return (
-    <div className="min-h-screen bg-gray-25">
-      <div className="container mx-auto px-4 py-8">
-        {/* Header */}
-        <div className="mb-8">
-          <Typography variant="h1" className="mb-4">
-            SpaceX Launches
+    <div className="min-h-screen bg-slate-50">
+      <div className="bg-white border-b border-gray-200 sticky top-0 z-10 shadow-sm">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+          <div className="flex items-center justify-between mb-4">
+            <div>
+              <Link href="/" className="cursor-pointer">
+                <Typography variant="h1" className="text-2xl font-bold text-gray-900 hover:text-blue-600 transition-colors">
+                  SpaceX Launches
+                </Typography>
+              </Link>
+              <Typography variant="body1" className="text-gray-600 text-sm">
+                Explore {memoizedData.totalResults.toLocaleString()} SpaceX missions and launches
           </Typography>
-          <Typography variant="subtitle1" color="secondary" className="max-w-2xl">
-            Explore SpaceX&apos;s mission history and upcoming launches. Filter by mission status, 
-            search by name, and discover the details of space exploration.
-          </Typography>
+            </div>
         </div>
 
-        {/* Filters */}
-        <div className="mb-8">
-          <LaunchFiltersBar
-            filters={filters}
-            onFiltersChange={setFilters}
-            resultCount={totalLaunches}
-            isLoading={isLoading}
+            <div className="flex flex-col lg:flex-row gap-4">
+            <div className="flex-1 relative">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+              <Input
+                placeholder="Search launches by mission name..."
+                value={searchInput}
+                onChange={(e) => setSearchInput(e.target.value)}
+                className="pl-10 h-10"
           />
         </div>
 
-        {/* Content */}
-        <div className="space-y-6">
-          {error ? (
-            <ErrorState />
-          ) : isLoading ? (
-            <LoadingSkeleton />
-          ) : currentLaunches.length === 0 ? (
-            <EmptyState />
+            <div className="flex gap-3">
+              <Select
+                value={filters.upcoming?.toString() || 'all'}
+                onValueChange={(value) => 
+                  handleFilterChange('upcoming', value === 'all' ? undefined : value === 'true')
+                }
+              >
+                <SelectTrigger className="w-32 h-10">
+                  <SelectValue placeholder="Status" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">All</SelectItem>
+                  <SelectItem value="true">Upcoming</SelectItem>
+                  <SelectItem value="false">Past</SelectItem>
+                </SelectContent>
+              </Select>
+
+              <Select
+                value={filters.success?.toString() || 'all'}
+                onValueChange={(value) => 
+                  handleFilterChange('success', value === 'all' ? undefined : value === 'true')
+                }
+              >
+                <SelectTrigger className="w-32 h-10">
+                  <SelectValue placeholder="Result" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">All</SelectItem>
+                  <SelectItem value="true">Success</SelectItem>
+                  <SelectItem value="false">Failed</SelectItem>
+                </SelectContent>
+              </Select>
+
+              <Select
+                value={`${filters.sortBy}-${filters.sortOrder}`}
+                onValueChange={(value) => {
+                  const [sortBy, sortOrder] = value.split('-');
+                  handleFilterChange('sortBy', sortBy);
+                  handleFilterChange('sortOrder', sortOrder);
+                }}
+              >
+                <SelectTrigger className="w-36 h-10">
+                  <SelectValue placeholder="Sort" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="date_utc-desc">Latest</SelectItem>
+                  <SelectItem value="date_utc-asc">Oldest</SelectItem>
+                  <SelectItem value="name-asc">A-Z</SelectItem>
+                  <SelectItem value="name-desc">Z-A</SelectItem>
+                </SelectContent>
+              </Select>
+
+              {activeFiltersCount > 0 && (
+                <Button variant="outline" onClick={clearFilters} className="gap-2 h-10 cursor-pointer">
+                  <X className="h-4 w-4" />
+                  Clear
+                </Button>
+              )}
+            </div>
+          </div>
+
+          {(debouncedSearch || activeFiltersCount > 0) && (
+            <div className="mt-3 text-center">
+              <span className="text-sm text-gray-600">
+                {memoizedData.allLaunches.length} of {memoizedData.totalResults.toLocaleString()} launches
+                {debouncedSearch && ` matching "${debouncedSearch}"`}
+              </span>
+            </div>
+          )}
+        </div>
+      </div>
+
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {isLoading || !memoizedData.hasLoadedData ? (
+          <div className="min-h-[60vh] flex items-center justify-center">
+            <div className="text-center">
+              <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-blue-600 mx-auto mb-4"></div>
+              <p className="text-gray-600 text-lg">Loading launches...</p>
+            </div>
+          </div>
+        ) : memoizedData.allLaunches.length === 0 ? (
+          <div className="text-center py-16">
+            <Card className="max-w-md mx-auto p-8 shadow-sm">
+              <Calendar className="h-16 w-16 text-gray-400 mx-auto mb-6" />
+              <Typography variant="h3" className=" text-xl">No launches found</Typography>
+              <Typography variant="body1" className="text-gray-600 mb-6 !mt-0">
+                No launches match your current filters. Try adjusting your search criteria.
+              </Typography>
+              <Button variant="outline" onClick={clearFilters} className="mx-auto cursor-pointer">
+                Clear all filters
+              </Button>
+            </Card>
+          </div>
           ) : (
             <>
-              {/* Launch Grid */}
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                {currentLaunches.map((launch: Launch) => (
+              {memoizedData.allLaunches.map((launch: Launch) => (
                   <LaunchCard
                     key={launch.id}
                     launch={launch}
-                    onViewDetails={handleViewDetails}
-                    onToggleFavorite={handleToggleFavorite}
-                    isFavorite={favorites.has(launch.id)}
+                  onViewDetails={handleLaunchClick}
                   />
                 ))}
               </div>
 
-              {/* Load More / Pagination */}
-              {launchData?.hasNextPage && (
-                <div className="text-center pt-8">
-                  <Button
-                    onClick={handleLoadMore}
-                    size="lg"
-                    disabled={isLoading}
-                    className="gap-2"
-                  >
-                    {isLoading ? (
-                      <>
-                        <RefreshCw className="h-4 w-4 animate-spin" />
-                        Loading...
-                      </>
-                    ) : (
-                      'Load more launches'
-                    )}
-                  </Button>
+            {hasNextPage && (
+              <div ref={loadMoreRef} className="flex justify-center py-8">
+                {isFetchingNextPage && (
+                  <div className="flex items-center gap-2 text-gray-600">
+                    <Loader2 className="h-5 w-5 animate-spin" />
+                    <span>Loading more launches...</span>
+                  </div>
+                )}
                 </div>
               )}
 
-              {/* Results Summary */}
-              <div className="text-center pt-6 border-t">
-                <Typography variant="body2" color="muted">
-                  Showing {currentLaunches.length} of {totalLaunches.toLocaleString()} launches
+            {!hasNextPage && memoizedData.allLaunches.length > 12 && (
+              <div className="text-center py-8 text-gray-500">
+                <Typography variant="body2">
+                  You&apos;ve reached the end of the launches list
                 </Typography>
               </div>
+            )}
             </>
           )}
-        </div>
       </div>
     </div>
+  );
+}
+
+export default function LaunchesPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="flex items-center gap-2">
+          <Loader2 className="h-6 w-6 animate-spin" />
+          <span>Loading launches...</span>
+        </div>
+      </div>
+    }>
+      <LaunchesContent />
+    </Suspense>
   );
 }

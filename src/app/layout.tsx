@@ -1,18 +1,19 @@
 import type { Metadata } from "next";
+import { ReactNode } from "react";
 import { Inter, JetBrains_Mono } from "next/font/google";
 import "./global.css";
 import QueryProvider from "@/providers/QueryProvider";
 
 const inter = Inter({
-  variable: "--font-inter",
   subsets: ["latin"],
   display: "swap",
+  variable: "--font-inter",
 });
 
 const jetbrainsMono = JetBrains_Mono({
-  variable: "--font-jetbrains-mono",
   subsets: ["latin"],
   display: "swap",
+  variable: "--font-mono",
 });
 
 export const metadata: Metadata = {
@@ -30,12 +31,12 @@ export const metadata: Metadata = {
 export default function RootLayout({
   children,
 }: Readonly<{
-  children: React.ReactNode;
+  children: ReactNode;
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className={`${inter.variable} ${jetbrainsMono.variable} font-sans antialiased min-h-screen bg-background text-foreground`}
+        className={`${inter.variable} ${jetbrainsMono.variable} antialiased min-h-screen`}
       >
         <QueryProvider>
           {children}

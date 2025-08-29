@@ -1,11 +1,11 @@
 import { apiRequest } from '../client';
 import { API_ENDPOINTS } from '../endpoints';
-import { Launch, LaunchFilters, LaunchQuery, LaunchQueryResponse } from '../../types';
+import { Launch, LaunchFilters, LaunchQuery, LaunchQueryResponse, ApiConfig } from '../../types';
 
 export const launchService = {
   queryLaunches: async (
     filters: LaunchFilters, 
-    config?: any
+    config?: ApiConfig
   ): Promise<LaunchQueryResponse> => {
     const queryRequest: LaunchQuery = {
       query: {},
@@ -56,7 +56,7 @@ export const launchService = {
     return data;
   },
 
-  getLaunchById: async (id: string, config?: any): Promise<Launch> => {
+  getLaunchById: async (id: string, config?: ApiConfig): Promise<Launch> => {
     const { data } = await apiRequest.get<Launch>(
       `${API_ENDPOINTS.LAUNCHES.GET_BY_ID(id)}?populate=rocket,launchpad,payloads`,
       config
@@ -64,7 +64,7 @@ export const launchService = {
     return data;
   },
 
-  getAllLaunches: async (config?: any): Promise<Launch[]> => {
+  getAllLaunches: async (config?: ApiConfig): Promise<Launch[]> => {
     const { data } = await apiRequest.get<Launch[]>(
       `${API_ENDPOINTS.LAUNCHES.GET_ALL}?populate=rocket,launchpad`,
       config
@@ -72,7 +72,7 @@ export const launchService = {
     return data;
   },
 
-  getUpcomingLaunches: async (limit?: number, config?: any): Promise<Launch[]> => {
+  getUpcomingLaunches: async (limit?: number, config?: ApiConfig): Promise<Launch[]> => {
     const endpoint = limit 
       ? `${API_ENDPOINTS.LAUNCHES.UPCOMING}?populate=rocket,launchpad&limit=${limit}`
       : `${API_ENDPOINTS.LAUNCHES.UPCOMING}?populate=rocket,launchpad`;
@@ -81,7 +81,7 @@ export const launchService = {
     return data;
   },
 
-  getPastLaunches: async (limit?: number, config?: any): Promise<Launch[]> => {
+  getPastLaunches: async (limit?: number, config?: ApiConfig): Promise<Launch[]> => {
     const endpoint = limit 
       ? `${API_ENDPOINTS.LAUNCHES.PAST}?populate=rocket,launchpad&limit=${limit}`
       : `${API_ENDPOINTS.LAUNCHES.PAST}?populate=rocket,launchpad`;
@@ -90,7 +90,7 @@ export const launchService = {
     return data;
   },
 
-  getLatestLaunches: async (limit: number = 10, config?: any): Promise<Launch[]> => {
+  getLatestLaunches: async (limit: number = 10, config?: ApiConfig): Promise<Launch[]> => {
     const { data } = await apiRequest.get<Launch[]>(
       `${API_ENDPOINTS.LAUNCHES.LATEST}?populate=rocket,launchpad&limit=${limit}`,
       config
@@ -98,7 +98,7 @@ export const launchService = {
     return data;
   },
 
-  getNextLaunch: async (config?: any): Promise<Launch> => {
+  getNextLaunch: async (config?: ApiConfig): Promise<Launch> => {
     const { data } = await apiRequest.get<Launch>(
       `${API_ENDPOINTS.LAUNCHES.NEXT}?populate=rocket,launchpad`,
       config
@@ -109,7 +109,7 @@ export const launchService = {
   searchLaunches: async (
     searchTerm: string, 
     limit: number = 20, 
-    config?: any
+    config?: ApiConfig
   ): Promise<LaunchQueryResponse> => {
     const queryRequest: LaunchQuery = {
       query: {
@@ -137,7 +137,7 @@ export const launchService = {
   getLaunchesByDateRange: async (
     startDate: string,
     endDate: string,
-    config?: any
+    config?: ApiConfig
   ): Promise<LaunchQueryResponse> => {
     const queryRequest: LaunchQuery = {
       query: {
@@ -163,7 +163,7 @@ export const launchService = {
 
   getLaunchesByRocket: async (
     rocketId: string, 
-    config?: any
+    config?: ApiConfig
   ): Promise<LaunchQueryResponse> => {
     const queryRequest: LaunchQuery = {
       query: {
@@ -186,7 +186,7 @@ export const launchService = {
 
   getLaunchesByLaunchpad: async (
     launchpadId: string, 
-    config?: any
+    config?: ApiConfig
   ): Promise<LaunchQueryResponse> => {
     const queryRequest: LaunchQuery = {
       query: {

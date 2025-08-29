@@ -9,4 +9,3 @@ export { Separator } from './atoms/Separator';
 export { ScrollArea, ScrollBar } from './atoms/ScrollArea';
 
 export { LaunchCard } from './molecules/LaunchCard';
-export { LaunchFiltersBar } from './molecules/LaunchFilters';

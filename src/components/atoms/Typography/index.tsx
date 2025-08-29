@@ -1,17 +1,17 @@
-import React from 'react';
+import { forwardRef, createElement, ReactNode, JSX } from 'react';
 import { cn } from '@/lib/utils';
 
 export interface TypographyProps {
   variant?: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'body1' | 'body2' | 'caption' | 'overline' | 'subtitle1' | 'subtitle2';
   component?: keyof JSX.IntrinsicElements;
   className?: string;
-  children: React.ReactNode;
+  children: ReactNode;
   color?: 'primary' | 'secondary' | 'muted' | 'success' | 'warning' | 'destructive';
   align?: 'left' | 'center' | 'right' | 'justify';
   weight?: 'light' | 'normal' | 'medium' | 'semibold' | 'bold';
 }
 
-const Typography = React.forwardRef<HTMLElement, TypographyProps>(
+const Typography = forwardRef<HTMLElement, TypographyProps>(
   ({ 
     variant = 'body1', 
     component, 
@@ -78,7 +78,7 @@ const Typography = React.forwardRef<HTMLElement, TypographyProps>(
 
     const Component = (component || defaultComponents[variant]) as keyof JSX.IntrinsicElements;
 
-    return React.createElement(
+    return createElement(
       Component,
       {
         ref,

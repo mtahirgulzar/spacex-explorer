@@ -1,4 +1,3 @@
-// SpaceX API Types
 export interface Launch {
   id: string;
   name: string;
@@ -205,7 +204,6 @@ export interface Core {
   landpad: string | null;
 }
 
-// Query Types
 export interface LaunchQuery {
   query?: {
     upcoming?: boolean;
@@ -242,7 +240,6 @@ export interface LaunchQueryResponse {
   nextPage: number | null;
 }
 
-// App-specific types
 export interface LaunchFilters {
   upcoming?: boolean;
   success?: boolean | null;
@@ -263,4 +260,8 @@ export interface FavoriteItem {
   date_utc: string;
   success: boolean | null;
   addedAt: string;
+}
+
+export interface ApiConfig {
+  signal?: AbortSignal;
 }

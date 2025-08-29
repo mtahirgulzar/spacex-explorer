@@ -59,12 +59,12 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
-      {/* Hero Section */}
+
       <div className="relative overflow-hidden bg-gradient-to-r from-blue-600 to-indigo-700">
         <div className="absolute inset-0 bg-black/20"></div>
         <div className="relative container mx-auto px-4 py-24">
           <div className="max-w-4xl mx-auto text-center text-white">
-            <Typography variant="h1" className="text-5xl md:text-6xl font-bold mb-6 text-white">
+            <Typography variant="h1" className="text-5xl md:text-6xl font-bold mb-6 text-white font-jetbrains">
               SpaceX Explorer
             </Typography>
             <Typography variant="subtitle1" className="text-xl md:text-2xl mb-8 text-blue-100">
@@ -74,7 +74,7 @@ export default function Home() {
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button 
                 size="lg" 
-                className="bg-white text-blue-600 hover:bg-blue-50 font-semibold px-8 py-3"
+                className="bg-white text-blue-600 hover:bg-blue-50 font-semibold px-8 py-3 cursor-pointer"
                 onClick={() => router.push('/launches')}
               >
                 <Rocket className="mr-2 h-5 w-5" />
@@ -83,7 +83,7 @@ export default function Home() {
               <Button 
                 size="lg" 
                 variant="outline" 
-                className="border-white text-white hover:bg-white hover:text-blue-600 font-semibold px-8 py-3"
+                className="border-white text-white hover:bg-white hover:text-blue-600 font-semibold px-8 py-3 cursor-pointer"
                 onClick={() => router.push('/launches?upcoming=true')}
               >
                 <Calendar className="mr-2 h-5 w-5" />
@@ -95,7 +95,7 @@ export default function Home() {
       </div>
 
       <div className="container mx-auto px-4 py-16">
-        {/* Stats Section */}
+
         <div className="mb-16">
           <Typography variant="h2" className="text-center mb-8">
             Mission Statistics
@@ -139,7 +139,7 @@ export default function Home() {
           </div>
         </div>
 
-        {/* Features Section */}
+
         <div className="mb-16">
           <Typography variant="h2" className="text-center mb-4">
             Explore SpaceX Missions
@@ -172,7 +172,7 @@ export default function Home() {
           </div>
         </div>
 
-        {/* API Status */}
+
         <div className="text-center">
           <Card className="max-w-md mx-auto">
             <CardHeader>

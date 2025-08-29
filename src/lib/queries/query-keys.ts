@@ -25,7 +25,7 @@ export const queryKeys = {
   rocket: {
     all: () => [...queryKeys.rockets(), 'list'] as const,
     lists: () => [...queryKeys.rocket.all(), 'list'] as const,
-    list: (filters?: Record<string, any>) => [...queryKeys.rocket.lists(), filters] as const,
+    list: (filters?: Record<string, unknown>) => [...queryKeys.rocket.lists(), filters] as const,
     details: () => [...queryKeys.rockets(), 'detail'] as const,
     detail: (id: string) => [...queryKeys.rocket.details(), id] as const,
   },
@@ -33,7 +33,7 @@ export const queryKeys = {
   launchpad: {
     all: () => [...queryKeys.launchpads(), 'list'] as const,
     lists: () => [...queryKeys.launchpad.all(), 'list'] as const,
-    list: (filters?: Record<string, any>) => [...queryKeys.launchpad.lists(), filters] as const,
+    list: (filters?: Record<string, unknown>) => [...queryKeys.launchpad.lists(), filters] as const,
     details: () => [...queryKeys.launchpads(), 'detail'] as const,
     detail: (id: string) => [...queryKeys.launchpad.details(), id] as const,
   },
@@ -41,7 +41,7 @@ export const queryKeys = {
   payload: {
     all: () => [...queryKeys.payloads(), 'list'] as const,
     lists: () => [...queryKeys.payload.all(), 'list'] as const,
-    list: (filters?: Record<string, any>) => [...queryKeys.payload.lists(), filters] as const,
+    list: (filters?: Record<string, unknown>) => [...queryKeys.payload.lists(), filters] as const,
     details: () => [...queryKeys.payloads(), 'detail'] as const,
     detail: (id: string) => [...queryKeys.payload.details(), id] as const,
   },
@@ -49,7 +49,7 @@ export const queryKeys = {
   core: {
     all: () => [...queryKeys.cores(), 'list'] as const,
     lists: () => [...queryKeys.core.all(), 'list'] as const,
-    list: (filters?: Record<string, any>) => [...queryKeys.core.lists(), filters] as const,
+    list: (filters?: Record<string, unknown>) => [...queryKeys.core.lists(), filters] as const,
     details: () => [...queryKeys.cores(), 'detail'] as const,
     detail: (id: string) => [...queryKeys.core.details(), id] as const,
   },

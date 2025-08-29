@@ -1,9 +1,9 @@
 import { apiRequest } from '../client';
 import { API_ENDPOINTS } from '../endpoints';
-import { Launchpad } from '../../types';
+import { Launchpad, ApiConfig } from '../../types';
 
 export const launchpadService = {
-  getAllLaunchpads: async (config?: any): Promise<Launchpad[]> => {
+  getAllLaunchpads: async (config?: ApiConfig): Promise<Launchpad[]> => {
     const { data } = await apiRequest.get<Launchpad[]>(
       API_ENDPOINTS.LAUNCHPADS.GET_ALL,
       config
@@ -11,7 +11,7 @@ export const launchpadService = {
     return data;
   },
 
-  getLaunchpadById: async (id: string, config?: any): Promise<Launchpad> => {
+  getLaunchpadById: async (id: string, config?: ApiConfig): Promise<Launchpad> => {
     const { data } = await apiRequest.get<Launchpad>(
       API_ENDPOINTS.LAUNCHPADS.GET_BY_ID(id),
       config
@@ -19,7 +19,7 @@ export const launchpadService = {
     return data;
   },
 
-  getActiveLaunchpads: async (config?: any): Promise<Launchpad[]> => {
+  getActiveLaunchpads: async (config?: ApiConfig): Promise<Launchpad[]> => {
     const { data } = await apiRequest.get<Launchpad[]>(
       `${API_ENDPOINTS.LAUNCHPADS.GET_ALL}?status=active`,
       config
@@ -27,7 +27,7 @@ export const launchpadService = {
     return data;
   },
 
-  getLaunchpads: async (config?: any): Promise<Launchpad[]> => {
+  getLaunchpads: async (config?: ApiConfig): Promise<Launchpad[]> => {
     return launchpadService.getAllLaunchpads(config);
   },
 };

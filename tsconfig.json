@@ -1,12 +1,10 @@
 {
   "compilerOptions": {
-    // Language and Environment
     "target": "ES2022",
     "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "skipLibCheck": true,
     
-    // Type Checking - Enterprise Level Strictness
     "strict": true,
     "exactOptionalPropertyTypes": true,
     "noImplicitAny": true,
@@ -22,7 +20,6 @@
     "strictNullChecks": true,
     "strictPropertyInitialization": true,
     
-    // Modules
     "module": "esnext",
     "moduleResolution": "bundler",
     "allowSyntheticDefaultImports": true,
@@ -31,39 +28,31 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     
-    // Emit
     "noEmit": true,
     "preserveConstEnums": true,
     "removeComments": false,
     "sourceMap": true,
     
-    // JavaScript Support
     "allowJs": true,
     "checkJs": false,
     
-    // Editor Support
     "incremental": true,
     "tsBuildInfoFile": ".next/cache/tsbuildinfo.json",
     
-    // Interop Constraints
     "verbatimModuleSyntax": false,
     
-    // Language and Environment
     "jsx": "preserve",
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
     
-    // Completeness
     "skipDefaultLibCheck": true,
     
-    // Next.js specific
     "plugins": [
       {
         "name": "next"
       }
     ],
     
-    // Path mapping for clean imports
     "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"],

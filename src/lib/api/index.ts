@@ -1,8 +1,6 @@
 export { 
   apiClient, 
-  apiRequest, 
-  apiUtils, 
-  createCancelToken 
+  apiRequest
 } from './client';
 
 export { 

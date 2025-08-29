@@ -1,23 +1,16 @@
 import { 
   useQuery, 
   useInfiniteQuery, 
-  useMutation, 
   useQueryClient,
   UseQueryOptions,
-  UseInfiniteQueryOptions,
-  InfiniteData
+  UseInfiniteQueryOptions
 } from '@tanstack/react-query';
 import { launchService } from '../api/services/launchService';
+import { rocketService } from '../api/services/rocketService';
+import { launchpadService } from '../api/services/launchpadService';
 import { queryKeys } from './query-keys';
-import { Launch, LaunchFilters, LaunchQueryResponse } from '../types';
-import { apiUtils } from '../api/client';
-
-const defaultRetryFn = (failureCount: number, error: unknown) => {
-  if (apiUtils.isApiError(error) && error.statusCode) {
-    if (error.statusCode >= 400 && error.statusCode < 500 && error.statusCode !== 429) {
-      return false;
-    }
-  }
+import { Launch, LaunchFilters, LaunchQueryResponse, Rocket, Launchpad } from '../types';
+const defaultRetryFn = (failureCount: number) => {
   return failureCount < 3;
 };
 
@@ -45,7 +38,7 @@ export const useInfiniteLaunches = (
     queryKey: queryKeys.launch.infinite(filters),
     queryFn: async ({ pageParam = 1, signal }) => {
       return launchService.queryLaunches(
-        { ...filters, page: pageParam },
+        { ...filters, page: pageParam as number },
         { signal }
       );
     },
@@ -195,6 +188,57 @@ export const useLaunchesByLaunchpad = (
     enabled: !!launchpadId,
     staleTime: 10 * 60 * 1000,
     gcTime: 60 * 60 * 1000,
+    ...options,
+  });
+};
+
+export const useLaunchById = (
+  id: string,
+  options?: Omit<UseQueryOptions<Launch>, 'queryKey' | 'queryFn'>
+) => {
+  return useQuery({
+    queryKey: queryKeys.launch.detail(id),
+    queryFn: async ({ signal }) => {
+      return launchService.getLaunchById(id, { signal });
+    },
+    enabled: !!id,
+    staleTime: 10 * 60 * 1000,
+    gcTime: 60 * 60 * 1000,
+    retry: defaultRetryFn,
+    ...options,
+  });
+};
+
+export const useRocketById = (
+  id: string,
+  options?: Omit<UseQueryOptions<Rocket>, 'queryKey' | 'queryFn'>
+) => {
+  return useQuery({
+    queryKey: queryKeys.rocket.detail(id),
+    queryFn: async ({ signal }) => {
+      return rocketService.getRocketById(id, { signal });
+    },
+    enabled: !!id,
+    staleTime: 30 * 60 * 1000,
+    gcTime: 60 * 60 * 1000,
+    retry: defaultRetryFn,
+    ...options,
+  });
+};
+
+export const useLaunchpadById = (
+  id: string,
+  options?: Omit<UseQueryOptions<Launchpad>, 'queryKey' | 'queryFn'>
+) => {
+  return useQuery({
+    queryKey: queryKeys.launchpad.detail(id),
+    queryFn: async ({ signal }) => {
+      return launchpadService.getLaunchpadById(id, { signal });
+    },
+    enabled: !!id,
+    staleTime: 30 * 60 * 1000,
+    gcTime: 60 * 60 * 1000,
+    retry: defaultRetryFn,
     ...options,
   });
 };
