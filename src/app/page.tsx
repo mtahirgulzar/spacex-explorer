@@ -185,7 +185,7 @@ export default function Home() {
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button 
                 size="lg" 
-                className="bg-blue-600 hover:bg-blue-700 text-white font-medium px-8 py-3"
+                className="bg-blue-600 hover:bg-blue-700 text-white font-medium px-8 py-3 cursor-pointer"
                 onClick={() => router.push('/launches')}
               >
                 <Rocket className="mr-2 h-5 w-5" />
@@ -194,7 +194,7 @@ export default function Home() {
               <Button 
                 variant="outline"
                 size="lg" 
-                className="border-gray-300 text-gray-700 hover:bg-gray-50 font-medium px-8 py-3"
+                className="border-gray-300 text-gray-700 hover:bg-gray-50 font-medium px-8 py-3 cursor-pointer"
                 onClick={() => router.push('/launches?upcoming=true')}
               >
                 <Calendar className="mr-2 h-5 w-5" />
