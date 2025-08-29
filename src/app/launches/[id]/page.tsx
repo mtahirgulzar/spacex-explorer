@@ -9,7 +9,8 @@ import {
   Button, 
   Card, 
   CardContent,
-  Badge
+  Badge,
+  FavoriteButton
 } from '@/components';
 import { useLaunchById, useRocketById, useLaunchpadById } from '@/lib/queries/launches';
 import { Payload } from '@/lib/types';
@@ -369,7 +370,10 @@ export default function LaunchDetailPage({ params }: LaunchDetailPageProps) {
                     Flight #{launch.flight_number}
                   </div>
                 </div>
-                {memoizedData.statusBadge}
+                <div className="flex items-center gap-3">
+                  <FavoriteButton launch={launch} variant="compact" />
+                  {memoizedData.statusBadge}
+                </div>
               </div>
 
               <div className="flex items-center gap-4 text-sm text-gray-600 mb-6">
