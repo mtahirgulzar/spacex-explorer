@@ -20,6 +20,7 @@ export const Tooltip: FC<TooltipProps> = ({
   const [tooltipPosition, setTooltipPosition] = useState({ top: 0, left: 0 });
   const triggerRef = useRef<HTMLDivElement>(null);
   const tooltipRef = useRef<HTMLDivElement>(null);
+  const hideTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
     if (isVisible && triggerRef.current && tooltipRef.current) {
@@ -65,12 +66,50 @@ export const Tooltip: FC<TooltipProps> = ({
     }
   }, [isVisible, position]);
 
+  // Hide tooltip when disabled state changes
+  useEffect(() => {
+    if (disabled && isVisible) {
+      setIsVisible(false);
+    }
+  }, [disabled, isVisible]);
+
+  // Cleanup timeout on unmount
+  useEffect(() => {
+    return () => {
+      if (hideTimeoutRef.current) {
+        clearTimeout(hideTimeoutRef.current);
+      }
+    };
+  }, []);
+
   if (disabled) {
     return <>{children}</>;
   }
 
-  const handleMouseEnter = () => setIsVisible(true);
-  const handleMouseLeave = () => setIsVisible(false);
+  const handleMouseEnter = () => {
+    // Clear any pending hide timeout
+    if (hideTimeoutRef.current) {
+      clearTimeout(hideTimeoutRef.current);
+      hideTimeoutRef.current = null;
+    }
+    setIsVisible(true);
+  };
+
+  const handleMouseLeave = () => {
+    // Add small delay to prevent flickering
+    hideTimeoutRef.current = setTimeout(() => {
+      setIsVisible(false);
+    }, 100);
+  };
+
+  const handleClick = () => {
+    // Immediately hide tooltip on click
+    if (hideTimeoutRef.current) {
+      clearTimeout(hideTimeoutRef.current);
+      hideTimeoutRef.current = null;
+    }
+    setIsVisible(false);
+  };
 
   const tooltipElement = isVisible && typeof window !== 'undefined' && (
     <div
@@ -94,6 +133,7 @@ export const Tooltip: FC<TooltipProps> = ({
         className={`relative inline-block ${className}`}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
+        onClick={handleClick}
       >
         {children}
       </div>

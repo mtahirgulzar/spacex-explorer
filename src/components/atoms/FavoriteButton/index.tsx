@@ -41,11 +41,9 @@ export const FavoriteButton: FC<FavoriteButtonProps> = ({
   };
 
   if (variant === 'icon') {
-    const tooltipContent = isLoadingState 
-      ? 'Loading...' 
-      : isLaunchFavorite 
-        ? 'Remove from favorites' 
-        : 'Add to favorites';
+    const tooltipContent = isLaunchFavorite 
+      ? 'Remove from favorites' 
+      : 'Add to favorites';
 
     return (
       <Tooltip content={tooltipContent} disabled={isLoadingState}>
@@ -76,11 +74,9 @@ export const FavoriteButton: FC<FavoriteButtonProps> = ({
   }
 
   if (variant === 'compact') {
-    const tooltipContent = isLoadingState 
-      ? 'Loading...' 
-      : isLaunchFavorite 
-        ? 'Remove from favorites' 
-        : 'Add to favorites';
+    const tooltipContent = isLaunchFavorite 
+      ? 'Remove from favorites' 
+      : 'Add to favorites';
 
     return (
       <Tooltip content={tooltipContent} disabled={isLoadingState}>
@@ -110,11 +106,9 @@ export const FavoriteButton: FC<FavoriteButtonProps> = ({
     );
   }
 
-  const tooltipContent = isLoadingState 
-    ? 'Loading...' 
-    : isLaunchFavorite 
-      ? 'Remove from favorites' 
-      : 'Add to favorites';
+  const tooltipContent = isLaunchFavorite 
+    ? 'Remove from favorites' 
+    : 'Add to favorites';
 
   return (
     <Tooltip content={tooltipContent} disabled={isLoadingState}>
