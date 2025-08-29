@@ -1,7 +1,7 @@
 import React, { useState, useMemo, FC } from 'react';
 import Image from 'next/image';
 import { format, isAfter, isBefore, addDays } from 'date-fns';
-import { Card, CardContent, Badge, Typography } from '@/components';
+import { Card, CardContent, Badge, Typography, FavoriteButton } from '@/components';
 import { Launch, Rocket, Launchpad } from '@/lib/types';
 import { 
   Calendar, 
@@ -195,6 +195,15 @@ export const LaunchCard: FC<LaunchCardProps> = ({
     >
       {primaryImage && (
         <div className="relative h-44 overflow-hidden">
+          <div className="absolute top-2 left-2 z-10">
+            <FavoriteButton
+              launch={launch}
+              variant="icon"
+              size="sm"
+              className="bg-white/90 hover:bg-white shadow-sm pointer-events-auto"
+            />
+          </div>
+          
           {!imageError ? (
             <>
               <Image

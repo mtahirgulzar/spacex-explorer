@@ -7,5 +7,7 @@ export { Input } from './atoms/Input';
 export { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './atoms/Select';
 export { Separator } from './atoms/Separator';
 export { ScrollArea, ScrollBar } from './atoms/ScrollArea';
+export { FavoriteButton } from './atoms/FavoriteButton';
+export { Tooltip } from './atoms/Tooltip';
 
 export { LaunchCard } from './molecules/LaunchCard';

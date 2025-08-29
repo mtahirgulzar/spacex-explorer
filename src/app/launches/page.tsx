@@ -19,13 +19,15 @@ import {
 import { LaunchCard } from '@/components/molecules';
 import { useInfiniteLaunches } from '@/lib/queries/launches';
 import { LaunchFilters, Launch, LaunchQueryResponse } from '@/lib/types';
+import { useFavorites } from '@/lib/hooks/useFavorites';
 import { 
   Search, 
   Calendar,
   Loader2,
   AlertCircle,
   RefreshCw,
-  X
+  X,
+  Heart
 } from 'lucide-react';
 
 const INITIAL_FILTERS: Omit<LaunchFilters, 'page'> = {
@@ -85,6 +87,7 @@ const parseUrlFilters = (searchParams: URLSearchParams): Omit<LaunchFilters, 'pa
 function LaunchesContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const { favoritesCount } = useFavorites();
   const [filters, setFilters] = useState<Omit<LaunchFilters, 'page'>>(INITIAL_FILTERS);
   const [debouncedSearch, setDebouncedSearch] = useState('');
   const [searchInput, setSearchInput] = useState('');
@@ -190,19 +193,26 @@ function LaunchesContent() {
 
   return (
     <div className="min-h-screen bg-slate-50">
-      <div className="bg-white border-b border-gray-200 sticky top-0 z-10 shadow-sm">
+      <div className="bg-white border-b border-gray-200 sticky top-0 z-50 shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex items-center justify-between mb-4">
             <div>
               <Link href="/" className="cursor-pointer">
                 <Typography variant="h1" className="text-2xl font-bold text-gray-900 hover:text-blue-600 transition-colors">
-                  SpaceX Launches
-                </Typography>
+            SpaceX Launches
+          </Typography>
               </Link>
               <Typography variant="body1" className="text-gray-600 text-sm">
                 Explore {memoizedData.totalResults.toLocaleString()} SpaceX missions and launches
           </Typography>
             </div>
+
+            <Link href="/favorites">
+              <Button variant="outline" className="gap-2 cursor-pointer">
+                <Heart className={`h-4 w-4 ${favoritesCount > 0 ? 'fill-red-500 text-red-500' : 'text-gray-500'}`} />
+                Favorites ({favoritesCount})
+              </Button>
+            </Link>
         </div>
 
             <div className="flex flex-col lg:flex-row gap-4">
