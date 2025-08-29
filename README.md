@@ -243,6 +243,78 @@ Following atomic design principles for maintainable and scalable UI components:
 - **Bundle size**: Optimized with code splitting
 - **API response time**: Cached and optimized queries
 
+## Tradeoffs and What I Would Do Next with More Time
+
+### Current Tradeoffs Made
+
+#### Performance vs. Development Speed
+- **Chose React Query over custom fetchers**: While custom fetchers could provide more granular control, React Query offers battle-tested caching, background updates, and error handling out of the box, significantly reducing development time.
+- **Implemented infinite scroll vs. traditional pagination**: Infinite scroll provides better UX but can be memory-intensive for very large datasets. With more time, we'd implement virtualization for better performance.
+
+#### Data Fetching Strategy
+- **Server-side filtering vs. client-side**: Using SpaceX API's query endpoint for server-side operations reduces client bundle size and improves performance, but limits offline capabilities.
+- **No SSR/SSG implementation**: Current implementation is client-side rendered for faster development. With more time, we'd implement hybrid rendering for better SEO and initial page loads.
+
+#### Offline Support
+- **LocalStorage-only persistence**: While sufficient for favorites, doesn't provide offline access to launch data. A service worker would enable full offline functionality.
+
+### What I Would Do Next with More Time
+
+#### 1. Charts and Analytics (Priority: High)
+- Launch success rates over time with line charts
+- Annual launch frequency analysis
+- Mission outcome statistics and trends
+- Interactive data visualization with Recharts
+
+#### 2. Offline Support with Service Worker (Priority: High)
+- **Cache launch data** for offline viewing
+- **Background sync** for favorites when connection returns
+- **Progressive Web App** capabilities with install prompts
+
+#### 3. SSR/SSG Implementation (Priority: Medium)
+- Static generation for launch details with pre-built pages
+- Server-side rendering for dynamic content
+- Hybrid approach balancing performance and SEO
+- Tradeoffs: Better SEO and initial page loads vs. longer build times and less real-time data freshness
+
+#### 4. Launch Comparison Feature (Priority: Medium)
+- Side-by-side launch comparison interface
+- Date, success rate, rocket, and launchpad analysis
+- Shareable comparison URLs for easy sharing
+- Multi-launch selection and comparison tools
+
+#### 5. Advanced Performance Optimizations
+- **Virtual scrolling** for large launch lists (1000+ items)
+- **Image lazy loading** with intersection observer
+- **Bundle splitting** by route for faster initial loads
+- **Web Workers** for heavy data processing
+
+#### 6. Enhanced User Experience
+- **Keyboard shortcuts** for power users
+- **Drag and drop** for favorites management
+- **Export functionality** (CSV, JSON) for launch data
+- **Dark/Light theme toggle** with system preference detection
+
+### Known Limitations and TODOs
+
+#### Current Limitations
+- **No offline data access** beyond favorites
+- **Limited charting capabilities** for data analysis
+- **No launch comparison** feature
+- **Client-side only rendering** (no SSR/SSG)
+
+#### Technical Debt
+- **ESLint configuration** needs Next.js plugin integration
+- **Error boundary** implementation could be more granular
+- **Test coverage** is minimal (would add Jest + React Testing Library)
+- **Performance monitoring** tools not integrated
+
+#### Future Considerations
+- **Internationalization** (i18n) for global audience
+- **Accessibility audit** with automated testing
+- **Performance monitoring** with Core Web Vitals tracking
+- **A/B testing** framework for UX improvements
+
 **Built with care for space exploration enthusiasts**
 
 *Time invested: 3-5 hours of focused development*
