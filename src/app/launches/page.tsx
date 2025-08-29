@@ -197,7 +197,7 @@ function LaunchesContentInner() {
           <div className="flex items-center justify-between mb-4">
             <div>
               <Link href="/" className="cursor-pointer">
-                <Typography variant="h1" className="text-2xl font-bold text-gray-900 hover:text-blue-600 transition-colors">
+                <Typography variant="h1" className="text-2xl font-bold text-gray-900 transition-colors">
             SpaceX Launches
           </Typography>
               </Link>
