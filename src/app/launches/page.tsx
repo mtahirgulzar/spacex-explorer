@@ -84,7 +84,7 @@ const parseUrlFilters = (searchParams: URLSearchParams): Omit<LaunchFilters, 'pa
   return urlFilters;
 };
 
-function LaunchesContent() {
+function LaunchesContentInner() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { favoritesCount } = useFavorites();
@@ -356,7 +356,7 @@ function LaunchesContent() {
   );
 }
 
-export default function LaunchesPage() {
+function LaunchesContent() {
   return (
     <Suspense fallback={
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
@@ -366,7 +366,11 @@ export default function LaunchesPage() {
         </div>
       </div>
     }>
-      <LaunchesContent />
+      <LaunchesContentInner />
     </Suspense>
   );
+}
+
+export default function LaunchesPage() {
+  return <LaunchesContent />;
 }
