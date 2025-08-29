@@ -241,7 +241,7 @@ export interface LaunchQueryResponse {
 }
 
 export interface LaunchFilters {
-  upcoming?: boolean;
+  upcoming?: boolean | undefined;
   success?: boolean | null;
   dateRange?: {
     start?: string;

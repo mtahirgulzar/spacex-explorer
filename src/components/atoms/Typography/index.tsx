@@ -2,7 +2,7 @@ import { forwardRef, createElement, ReactNode, JSX } from 'react';
 import { cn } from '@/lib/utils';
 
 export interface TypographyProps {
-  variant?: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'body1' | 'body2' | 'caption' | 'overline' | 'subtitle1' | 'subtitle2';
+  variant?: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'body1' | 'body2' | 'caption' | 'overline' | 'subtitle1' | 'subtitle2' | 'lead';
   component?: keyof JSX.IntrinsicElements;
   className?: string;
   children: ReactNode;
@@ -35,6 +35,7 @@ const Typography = forwardRef<HTMLElement, TypographyProps>(
       body2: 'text-sm leading-6',
       caption: 'text-xs text-muted-foreground',
       overline: 'text-xs font-medium uppercase tracking-wider',
+      lead: 'text-xl text-muted-foreground',
     };
 
     const colors = {
@@ -74,6 +75,7 @@ const Typography = forwardRef<HTMLElement, TypographyProps>(
       body2: 'p',
       caption: 'span',
       overline: 'span',
+      lead: 'p',
     };
 
     const Component = (component || defaultComponents[variant]) as keyof JSX.IntrinsicElements;
