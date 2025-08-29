@@ -8,7 +8,6 @@ SpaceX Explorer provides a comprehensive platform to browse, filter, and analyze
 
 ## Features
 
-### Must-Have Features
 
 #### Launches List
 - **Server-side pagination** via `POST /launches/query` (not client-side filtering)
@@ -204,7 +203,6 @@ interface Launch {
   upcoming: boolean;
   rocket: string | Rocket;
   launchpad: string | Launchpad;
-  // ... complete type definitions
 }
 ```
 
@@ -244,27 +242,6 @@ Following atomic design principles for maintainable and scalable UI components:
 - **Cumulative Layout Shift**: < 0.1
 - **Bundle size**: Optimized with code splitting
 - **API response time**: Cached and optimized queries
-
-## Contributing
-
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit changes (`git commit -m 'Add amazing feature'`)
-4. Push to branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
-
-## License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## Acknowledgments
-
-- **SpaceX** for providing the comprehensive API
-- **Next.js team** for the excellent framework
-- **TanStack** for powerful state management tools
-- **shadcn/ui** for beautiful, accessible components
-
----
 
 **Built with care for space exploration enthusiasts**
 

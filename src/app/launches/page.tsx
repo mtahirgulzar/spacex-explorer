@@ -25,7 +25,6 @@ import {
   Calendar,
   Loader2,
   AlertCircle,
-  RefreshCw,
   X,
   Heart
 } from 'lucide-react';
@@ -200,88 +199,113 @@ function LaunchesContent() {
             </Link>
         </div>
 
+          <div className="space-y-4">
             <div className="flex flex-col lg:flex-row gap-4">
-            <div className="flex-1 relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
-              <Input
-                placeholder="Search launches by mission name..."
-                value={searchInput}
-                onChange={(e) => setSearchInput(e.target.value)}
-                className="pl-10 h-10"
-          />
-        </div>
+              <div className="flex-1 relative">
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400 pointer-events-none select-none" />
+                <Input
+                  placeholder="Search launches by mission name..."
+                  value={searchInput}
+                  onChange={(e) => setSearchInput(e.target.value)}
+                  className="pl-10 h-11 bg-white border border-gray-200 focus:border-gray-200 focus:ring-0 focus:outline-none focus:ring-offset-0"
+                />
+              </div>
 
-            <div className="flex gap-3">
-              <Select
-                value={filters.upcoming?.toString() || 'all'}
-                onValueChange={(value) => 
-                  handleFilterChange('upcoming', value === 'all' ? undefined : value === 'true')
-                }
-              >
-                <SelectTrigger className="w-32 h-10">
-                  <SelectValue placeholder="Status" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">All</SelectItem>
-                  <SelectItem value="true">Upcoming</SelectItem>
-                  <SelectItem value="false">Past</SelectItem>
-                </SelectContent>
-              </Select>
+              <div className="flex flex-col items-end gap-3">
+                <div className="flex items-center gap-1 bg-gray-100 rounded-lg p-1">
+                  <Select
+                    value={filters.upcoming?.toString() || 'all'}
+                    onValueChange={(value) => 
+                      handleFilterChange('upcoming', value === 'all' ? undefined : value === 'true')
+                    }
+                  >
+                    <SelectTrigger 
+                      className="w-[140px] h-9 border-0 bg-transparent hover:bg-white data-[state=open]:bg-white transition-colors focus:ring-0 focus:ring-offset-0 focus:outline-none focus:ring-offset-0 rounded select-none [&:focus]:ring-0 [&:focus]:ring-offset-0 [&:focus]:outline-none"
+                    >
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="all">All Status</SelectItem>
+                      <SelectItem value="true">Upcoming</SelectItem>
+                      <SelectItem value="false">Past</SelectItem>
+                    </SelectContent>
+                  </Select>
 
-              <Select
-                value={filters.success?.toString() || 'all'}
-                onValueChange={(value) => 
-                  handleFilterChange('success', value === 'all' ? undefined : value === 'true')
-                }
-              >
-                <SelectTrigger className="w-32 h-10">
-                  <SelectValue placeholder="Result" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">All</SelectItem>
-                  <SelectItem value="true">Success</SelectItem>
-                  <SelectItem value="false">Failed</SelectItem>
-                </SelectContent>
-              </Select>
+                  <Select
+                    value={filters.success?.toString() || 'all'}
+                    onValueChange={(value) => 
+                      handleFilterChange('success', value === 'all' ? undefined : value === 'true')
+                    }
+                  >
+                    <SelectTrigger 
+                      className="w-[140px] h-9 border-0 bg-transparent hover:bg-white data-[state=open]:bg-white transition-colors focus:ring-0 focus:ring-offset-0 focus:outline-none focus:ring-offset-0 rounded select-none [&:focus]:ring-0 [&:focus]:ring-offset-0 [&:focus]:outline-none"
+                    >
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="all">All Results</SelectItem>
+                      <SelectItem value="true">Success</SelectItem>
+                      <SelectItem value="false">Failed</SelectItem>
+                    </SelectContent>
+                  </Select>
 
-              <Select
-                value={`${filters.sortBy}-${filters.sortOrder}`}
-                onValueChange={(value) => {
-                  const [sortBy, sortOrder] = value.split('-');
-                  handleFilterChange('sortBy', sortBy);
-                  handleFilterChange('sortOrder', sortOrder);
-                }}
-              >
-                <SelectTrigger className="w-36 h-10">
-                  <SelectValue placeholder="Sort" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="date_utc-desc">Latest</SelectItem>
-                  <SelectItem value="date_utc-asc">Oldest</SelectItem>
-                  <SelectItem value="name-asc">A-Z</SelectItem>
-                  <SelectItem value="name-desc">Z-A</SelectItem>
-                </SelectContent>
-              </Select>
+                  <Select
+                    value={`${filters.sortBy}-${filters.sortOrder}`}
+                    onValueChange={(value) => {
+                      const [sortBy, sortOrder] = value.split('-');
+                      handleFilterChange('sortBy', sortBy);
+                      handleFilterChange('sortOrder', sortOrder);
+                    }}
+                  >
+                    <SelectTrigger 
+                      className="w-[140px] h-9 border-0 bg-transparent hover:bg-white data-[state=open]:bg-white transition-colors focus:ring-0 focus:ring-offset-0 focus:outline-none focus:ring-offset-0 rounded select-none [&:focus]:ring-0 [&:focus]:ring-offset-0 [&:focus]:outline-none"
+                    >
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="date_utc-desc">Latest First</SelectItem>
+                      <SelectItem value="date_utc-asc">Oldest First</SelectItem>
+                      <SelectItem value="name-asc">A to Z</SelectItem>
+                      <SelectItem value="name-desc">Z to A</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
 
-              {activeFiltersCount > 0 && (
-                <Button variant="outline" onClick={clearFilters} className="gap-2 h-10 cursor-pointer">
-                  <X className="h-4 w-4" />
-                  Clear
-                </Button>
+               
+              </div>
+            </div>
+
+            <div className="flex items-center justify-between gap-2 text-sm text-gray-600">
+              <div className="flex items-center gap-2 text-sm text-gray-600">
+              <span className="font-medium">
+                {memoizedData.allLaunches.length} of {memoizedData.totalResults.toLocaleString()} launches
+              </span>
+              {debouncedSearch && (
+                <span className="text-gray-400">
+                  • matching "{debouncedSearch}"
+                </span>
               )}
+              {activeFiltersCount > 0 && (
+                <span className="text-blue-600">
+                  • {activeFiltersCount} filter{activeFiltersCount !== 1 ? 's' : ''} applied
+                </span>
+              )}
+              </div>
+            
+               {activeFiltersCount > 0 && (
+                                      <Button 
+                      variant="ghost" 
+                      onClick={clearFilters} 
+                      className="h-8 px-3 text-red-600 hover:text-red-700 hover:bg-red-50 cursor-pointer focus:ring-0 focus:outline-none rounded text-sm"
+                    >
+                    <X className="h-3 w-3 mr-1" />
+                    Reset Filters
+                  </Button>
+                )}
             </div>
           </div>
-
-          {(debouncedSearch || activeFiltersCount > 0) && (
-            <div className="mt-3 text-center">
-              <span className="text-sm text-gray-600">
-                {memoizedData.allLaunches.length} of {memoizedData.totalResults.toLocaleString()} launches
-                {debouncedSearch && ` matching "${debouncedSearch}"`}
-              </span>
-            </div>
-          )}
         </div>
-      </div>
+        </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {isLoading || !memoizedData.hasLoadedData ? (
