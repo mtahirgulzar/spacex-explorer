@@ -2,10 +2,12 @@
 
 import Link from "next/link";
 import { usePathname, useSearchParams } from 'next/navigation';
+import { useEffect, useState } from 'react';
 
 export function Header() {
   const pathname = usePathname();
   const searchParams = useSearchParams();
+  const [isScrolled, setIsScrolled] = useState(false);
   
   const isActive = (path: string, status?: string) => {
     if (pathname !== path) return false;
@@ -16,8 +18,21 @@ export function Header() {
   const getLinkClass = (isActive: boolean) => 
     `relative transition-all duration-300 ease-in-out group ${isActive ? 'text-foreground font-medium' : 'text-foreground/60 hover:text-foreground/80'}`;
 
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 10);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
   return (
-    <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+    <header className={`sticky top-0 z-50 w-full border-b transition-colors duration-300 ${
+      isScrolled 
+        ? 'bg-white shadow-sm' 
+        : 'bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60'
+    }`}>
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex h-16 items-center justify-between">
           <div className="flex items-center gap-6">

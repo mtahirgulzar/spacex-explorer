@@ -8,7 +8,6 @@ import {
   Typography, 
   Button, 
   Card, 
-
   Input,
   Select,
   SelectContent,
@@ -176,16 +175,16 @@ function LaunchesContentInner() {
       <div className="min-h-screen bg-gray-50 p-6">
         <div className="max-w-4xl mx-auto">
           <Card className="p-8 text-center">
-        <AlertCircle className="h-12 w-12 text-red-500 mx-auto mb-4" />
+            <AlertCircle className="h-12 w-12 text-red-500 mx-auto mb-4" />
             <Typography variant="h3" className="mb-2">Failed to load launches</Typography>
             <Typography variant="body1" className="text-gray-600 mb-6">
               We couldn&apos;t load the launches data. Please check your connection and try again.
-        </Typography>
+            </Typography>
             <Button onClick={() => refetch()} className="gap-2 cursor-pointer">
               <RefreshCw className="h-4 w-4" />
               Try Again
-        </Button>
-    </Card>
+            </Button>
+          </Card>
         </div>
       </div>
     );
@@ -193,106 +192,104 @@ function LaunchesContentInner() {
 
   return (
     <div className="min-h-screen bg-slate-50">
-      <div className="bg-white border-b border-gray-200 sticky top-0 z-50 shadow-sm">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-          <div className="flex items-center justify-between mb-4">
-            <div>
-              <Link href="/" className="cursor-pointer">
-                <Typography variant="h1" className="text-2xl font-bold text-gray-900 transition-colors">
-            SpaceX Launches
-          </Typography>
-              </Link>
-              <Typography variant="body1" className="text-gray-600 text-sm">
-                Explore {memoizedData.totalResults.toLocaleString()} SpaceX missions and launches
-          </Typography>
-            </div>
+      {/* Removed the sticky header from here since we have a global Header component */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 pt-4">
+        {/* Page title and favorites button - no longer sticky */}
+        <div className="flex items-center justify-between mb-6">
+          <div>
+            <Typography variant="h1" className="text-2xl font-bold text-gray-900">
+              SpaceX Launches
+            </Typography>
+            <Typography variant="body1" className="text-gray-600 text-sm mt-1">
+              Explore {memoizedData.totalResults.toLocaleString()} SpaceX missions and launches
+            </Typography>
+          </div>
 
-            <Link href="/favorites">
-              <Button variant="outline" className="gap-2 cursor-pointer">
-                <Heart className={`h-4 w-4 ${favoritesCount > 0 ? 'fill-red-500 text-red-500' : 'text-gray-500'}`} />
-                Favorites ({favoritesCount})
-              </Button>
-            </Link>
+          <Link href="/favorites">
+            <Button variant="outline" className="gap-2 cursor-pointer">
+              <Heart className={`h-4 w-4 ${favoritesCount > 0 ? 'fill-red-500 text-red-500' : 'text-gray-500'}`} />
+              Favorites ({favoritesCount})
+            </Button>
+          </Link>
         </div>
 
-          <div className="space-y-4">
-            <div className="flex flex-col lg:flex-row gap-4">
-              <div className="flex-1 relative">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400 pointer-events-none select-none" />
-                <Input
-                  placeholder="Search launches by mission name..."
-                  value={searchInput}
-                  onChange={(e) => setSearchInput(e.target.value)}
-                  className="pl-10 h-11 bg-white border border-gray-200 focus:border-gray-200 focus:ring-0 focus:outline-none focus:ring-offset-0"
-                />
-              </div>
-
-              <div className="flex flex-col items-end gap-3">
-                <div className="flex items-center gap-1 bg-gray-100 rounded-lg p-1">
-                  <Select
-                    value={filters.upcoming?.toString() || 'all'}
-                    onValueChange={(value) => 
-                      handleFilterChange('upcoming', value === 'all' ? undefined : value === 'true')
-                    }
-                  >
-                    <SelectTrigger 
-                      className="w-[140px] h-9 border-0 bg-transparent hover:bg-white data-[state=open]:bg-white transition-colors focus:ring-0 focus:ring-offset-0 focus:outline-none focus:ring-offset-0 rounded select-none [&:focus]:ring-0 [&:focus]:ring-offset-0 [&:focus]:outline-none"
-                    >
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="all">All Status</SelectItem>
-                      <SelectItem value="true">Upcoming</SelectItem>
-                      <SelectItem value="false">Past</SelectItem>
-                    </SelectContent>
-                  </Select>
-
-                  <Select
-                    value={filters.success?.toString() || 'all'}
-                    onValueChange={(value) => 
-                      handleFilterChange('success', value === 'all' ? undefined : value === 'true')
-                    }
-                  >
-                    <SelectTrigger 
-                      className="w-[140px] h-9 border-0 bg-transparent hover:bg-white data-[state=open]:bg-white transition-colors focus:ring-0 focus:ring-offset-0 focus:outline-none focus:ring-offset-0 rounded select-none [&:focus]:ring-0 [&:focus]:ring-offset-0 [&:focus]:outline-none"
-                    >
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="all">All Results</SelectItem>
-                      <SelectItem value="true">Success</SelectItem>
-                      <SelectItem value="false">Failed</SelectItem>
-                    </SelectContent>
-                  </Select>
-
-                  <Select
-                    value={`${filters.sortBy}-${filters.sortOrder}`}
-                    onValueChange={(value) => {
-                      const [sortBy, sortOrder] = value.split('-');
-                      handleFilterChange('sortBy', sortBy);
-                      handleFilterChange('sortOrder', sortOrder);
-                    }}
-                  >
-                    <SelectTrigger 
-                      className="w-[140px] h-9 border-0 bg-transparent hover:bg-white data-[state=open]:bg-white transition-colors focus:ring-0 focus:ring-offset-0 focus:outline-none focus:ring-offset-0 rounded select-none [&:focus]:ring-0 [&:focus]:ring-offset-0 [&:focus]:outline-none"
-                    >
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="date_utc-desc">Latest First</SelectItem>
-                      <SelectItem value="date_utc-asc">Oldest First</SelectItem>
-                      <SelectItem value="name-asc">A to Z</SelectItem>
-                      <SelectItem value="name-desc">Z to A</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-
-               
-              </div>
+        {/* Search and filters section */}
+        <div className="space-y-4 mb-8">
+          <div className="flex flex-col lg:flex-row gap-4">
+            <div className="flex-1 relative">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400 pointer-events-none select-none" />
+              <Input
+                placeholder="Search launches by mission name..."
+                value={searchInput}
+                onChange={(e) => setSearchInput(e.target.value)}
+                className="pl-10 h-11 bg-white border border-gray-200 focus:border-gray-200 focus:ring-0 focus:outline-none focus:ring-offset-0"
+              />
             </div>
 
-            <div className="flex items-center justify-between gap-2 text-sm text-gray-600">
-              <div className="flex items-center gap-2 text-sm text-gray-600">
+            <div className="flex flex-col items-end gap-3">
+              <div className="flex items-center gap-1 bg-gray-100 rounded-lg p-1">
+                <Select
+                  value={filters.upcoming?.toString() || 'all'}
+                  onValueChange={(value) => 
+                    handleFilterChange('upcoming', value === 'all' ? undefined : value === 'true')
+                  }
+                >
+                  <SelectTrigger 
+                    className="w-[140px] h-9 border-0 bg-transparent hover:bg-white data-[state=open]:bg-white transition-colors focus:ring-0 focus:ring-offset-0 focus:outline-none focus:ring-offset-0 rounded select-none [&:focus]:ring-0 [&:focus]:ring-offset-0 [&:focus]:outline-none"
+                  >
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">All Status</SelectItem>
+                    <SelectItem value="true">Upcoming</SelectItem>
+                    <SelectItem value="false">Past</SelectItem>
+                  </SelectContent>
+                </Select>
+
+                <Select
+                  value={filters.success?.toString() || 'all'}
+                  onValueChange={(value) => 
+                    handleFilterChange('success', value === 'all' ? undefined : value === 'true')
+                  }
+                >
+                  <SelectTrigger 
+                    className="w-[140px] h-9 border-0 bg-transparent hover:bg-white data-[state=open]:bg-white transition-colors focus:ring-0 focus:ring-offset-0 focus:outline-none focus:ring-offset-0 rounded select-none [&:focus]:ring-0 [&:focus]:ring-offset-0 [&:focus]:outline-none"
+                  >
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">All Results</SelectItem>
+                    <SelectItem value="true">Success</SelectItem>
+                    <SelectItem value="false">Failed</SelectItem>
+                  </SelectContent>
+                </Select>
+
+                <Select
+                  value={`${filters.sortBy}-${filters.sortOrder}`}
+                  onValueChange={(value) => {
+                    const [sortBy, sortOrder] = value.split('-');
+                    handleFilterChange('sortBy', sortBy);
+                    handleFilterChange('sortOrder', sortOrder);
+                  }}
+                >
+                  <SelectTrigger 
+                    className="w-[140px] h-9 border-0 bg-transparent hover:bg-white data-[state=open]:bg-white transition-colors focus:ring-0 focus:ring-offset-0 focus:outline-none focus:ring-offset-0 rounded select-none [&:focus]:ring-0 [&:focus]:ring-offset-0 [&:focus]:outline-none"
+                  >
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="date_utc-desc">Latest First</SelectItem>
+                    <SelectItem value="date_utc-asc">Oldest First</SelectItem>
+                    <SelectItem value="name-asc">A to Z</SelectItem>
+                    <SelectItem value="name-desc">Z to A</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+          </div>
+
+          <div className="flex items-center justify-between gap-2 text-sm text-gray-600">
+            <div className="flex items-center gap-2 text-sm text-gray-600">
               <span className="font-medium">
                 {memoizedData.allLaunches.length} of {memoizedData.totalResults.toLocaleString()} launches
               </span>
@@ -306,24 +303,22 @@ function LaunchesContentInner() {
                   • {activeFiltersCount} filter{activeFiltersCount !== 1 ? 's' : ''} applied
                 </span>
               )}
-              </div>
-            
-               {activeFiltersCount > 0 && (
-                                      <Button 
-                      variant="ghost" 
-                      onClick={clearFilters} 
-                      className="h-8 px-3 text-red-600 hover:text-red-700 hover:bg-red-50 cursor-pointer focus:ring-0 focus:outline-none rounded text-sm"
-                    >
-                    <X className="h-3 w-3 mr-1" />
-                    Reset Filters
-                  </Button>
-                )}
             </div>
+          
+            {activeFiltersCount > 0 && (
+              <Button 
+                variant="ghost" 
+                onClick={clearFilters} 
+                className="h-8 px-3 text-red-600 hover:text-red-700 hover:bg-red-50 cursor-pointer focus:ring-0 focus:outline-none rounded text-sm"
+              >
+                <X className="h-3 w-3 mr-1" />
+                Reset Filters
+              </Button>
+            )}
           </div>
         </div>
-        </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* Launches grid */}
         {isLoading || !memoizedData.hasLoadedData ? (
           <div className="min-h-[60vh] flex items-center justify-center">
             <div className="text-center">
@@ -344,17 +339,17 @@ function LaunchesContentInner() {
               </Button>
             </Card>
           </div>
-          ) : (
-            <>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        ) : (
+          <>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
               {memoizedData.allLaunches.map((launch: Launch) => (
-                  <LaunchCard
-                    key={launch.id}
-                    launch={launch}
+                <LaunchCard
+                  key={launch.id}
+                  launch={launch}
                   onViewDetails={handleLaunchClick}
-                  />
-                ))}
-              </div>
+                />
+              ))}
+            </div>
 
             {hasNextPage && (
               <div ref={loadMoreRef} className="flex justify-center py-8">
@@ -364,8 +359,8 @@ function LaunchesContentInner() {
                     <span>Loading more launches...</span>
                   </div>
                 )}
-                </div>
-              )}
+              </div>
+            )}
 
             {!hasNextPage && memoizedData.allLaunches.length > 12 && (
               <div className="text-center py-8 text-gray-500">
@@ -374,8 +369,8 @@ function LaunchesContentInner() {
                 </Typography>
               </div>
             )}
-            </>
-          )}
+          </>
+        )}
       </div>
     </div>
   );
