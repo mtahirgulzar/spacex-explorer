@@ -1,27 +1,103 @@
 {
   "compilerOptions": {
-    "target": "ES2017",
+    // Language and Environment
+    "target": "ES2022",
     "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "skipLibCheck": true,
+    
+    // Type Checking - Enterprise Level Strictness
     "strict": true,
-    "noEmit": true,
-    "esModuleInterop": true,
+    "exactOptionalPropertyTypes": true,
+    "noImplicitAny": true,
+    "noImplicitReturns": true,
+    "noImplicitThis": true,
+    "noImplicitOverride": true,
+    "noPropertyAccessFromIndexSignature": true,
+    "noUncheckedIndexedAccess": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "strictBindCallApply": true,
+    "strictFunctionTypes": true,
+    "strictNullChecks": true,
+    "strictPropertyInitialization": true,
+    
+    // Modules
     "module": "esnext",
     "moduleResolution": "bundler",
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "jsx": "preserve",
+    
+    // Emit
+    "noEmit": true,
+    "preserveConstEnums": true,
+    "removeComments": false,
+    "sourceMap": true,
+    
+    // JavaScript Support
+    "allowJs": true,
+    "checkJs": false,
+    
+    // Editor Support
     "incremental": true,
+    "tsBuildInfoFile": ".next/cache/tsbuildinfo.json",
+    
+    // Interop Constraints
+    "verbatimModuleSyntax": false,
+    
+    // Language and Environment
+    "jsx": "preserve",
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    
+    // Completeness
+    "skipDefaultLibCheck": true,
+    
+    // Next.js specific
     "plugins": [
       {
         "name": "next"
       }
     ],
+    
+    // Path mapping for clean imports
+    "baseUrl": ".",
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*"],
+      "@/components/*": ["./src/components/*"],
+      "@/lib/*": ["./src/lib/*"],
+      "@/hooks/*": ["./src/lib/hooks/*"],
+      "@/types/*": ["./src/lib/types/*"],
+      "@/utils/*": ["./src/lib/utils/*"],
+      "@/styles/*": ["./src/styles/*"],
+      "@/assets/*": ["./src/assets/*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
-  "exclude": ["node_modules"]
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    ".next/types/**/*.ts",
+    "eslint.config.ts",
+    "postcss.config.ts",
+    "next.config.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    ".next",
+    "out",
+    "dist",
+    "build",
+    "coverage",
+    "**/*.test.ts",
+    "**/*.test.tsx",
+    "**/*.spec.ts",
+    "**/*.spec.tsx"
+  ],
+  "ts-node": {
+    "esm": true
+  }
 }
