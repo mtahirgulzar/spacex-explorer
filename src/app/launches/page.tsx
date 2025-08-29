@@ -26,7 +26,8 @@ import {
   Loader2,
   AlertCircle,
   X,
-  Heart
+  Heart,
+  RefreshCw
 } from 'lucide-react';
 
 const INITIAL_FILTERS: Omit<LaunchFilters, 'page'> = {
@@ -297,7 +298,7 @@ function LaunchesContentInner() {
               </span>
               {debouncedSearch && (
                 <span className="text-gray-400">
-                  • matching "{debouncedSearch}"
+                  • matching &quot;{debouncedSearch}&quot;
                 </span>
               )}
               {activeFiltersCount > 0 && (

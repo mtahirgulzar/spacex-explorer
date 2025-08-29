@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { ReactNode } from "react";
+import { ReactNode, Suspense } from "react";
 import { Inter, JetBrains_Mono } from "next/font/google";
 import "./global.css";
 import QueryProvider from "@/providers/QueryProvider";
@@ -40,7 +40,9 @@ export default function RootLayout({
       <body
         className={`${inter.variable} ${jetbrainsMono.variable} antialiased min-h-screen flex flex-col`}
       >
-        <Header />
+        <Suspense fallback={<div className="h-16 border-b bg-background/95" />}>
+          <Header />
+        </Suspense>
         <main className="flex-1">
           <QueryProvider>{children}</QueryProvider>
         </main>
