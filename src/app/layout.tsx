@@ -3,6 +3,8 @@ import { ReactNode } from "react";
 import { Inter, JetBrains_Mono } from "next/font/google";
 import "./global.css";
 import QueryProvider from "@/providers/QueryProvider";
+import { Header } from "@/components/organisms/Header";
+import { Footer } from "@/components/organisms/Footer";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -36,11 +38,13 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className={`${inter.variable} ${jetbrainsMono.variable} antialiased min-h-screen`}
+        className={`${inter.variable} ${jetbrainsMono.variable} antialiased min-h-screen flex flex-col`}
       >
-        <QueryProvider>
-          {children}
-        </QueryProvider>
+        <Header />
+        <main className="flex-1">
+          <QueryProvider>{children}</QueryProvider>
+        </main>
+        <Footer />
       </body>
     </html>
   );

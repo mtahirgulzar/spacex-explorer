@@ -44,8 +44,22 @@ const SORT_PARAM_MAP = {
   sortOrder: ['asc', 'desc'] as const
 } as const;
 
-const parseUrlFilters = (searchParams: URLSearchParams) => {
-  const urlFilters: Partial<Omit<LaunchFilters, 'page'>> = { ...INITIAL_FILTERS };
+const parseUrlFilters = (searchParams: URLSearchParams): Omit<LaunchFilters, 'page'> => {
+  const urlFilters: Omit<LaunchFilters, 'page'> = { ...INITIAL_FILTERS };
+  
+  const status = searchParams.get('status');
+  if (status === 'upcoming' || status === 'past') {
+    urlFilters.upcoming = status === 'upcoming';
+  }
+  
+  const upcomingParam = searchParams.get('upcoming');
+  if (upcomingParam === 'true' || upcomingParam === 'false') {
+    urlFilters.upcoming = upcomingParam === 'true';
+  }
+  
+  if (urlFilters.upcoming === undefined) {
+    delete urlFilters.upcoming;
+  }
   
   Object.entries(BOOLEAN_PARAM_MAP).forEach(([key, valueMap]) => {
     const param = searchParams.get(key);
@@ -54,6 +68,7 @@ const parseUrlFilters = (searchParams: URLSearchParams) => {
     }
   });
 
+  // Handle sorting
   const sortBy = searchParams.get('sortBy');
   if (sortBy && SORT_PARAM_MAP.sortBy.includes(sortBy as typeof SORT_PARAM_MAP.sortBy[number])) {
     urlFilters.sortBy = sortBy as typeof SORT_PARAM_MAP.sortBy[number];
