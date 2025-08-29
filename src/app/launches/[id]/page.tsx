@@ -436,142 +436,139 @@ export default function LaunchDetailPage({ params }: LaunchDetailPageProps) {
           </section>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {rocket && (
-            <Card>
-              <CardContent className="p-6">
-                <Typography variant="h2" className="text-xl font-semibold mb-4 flex items-center gap-2">
-                  <RocketIcon className="h-5 w-5" />
-                  Rocket Details
-                </Typography>
-                
-                <div className="space-y-4">
-                  <div>
-                    <Typography variant="h3" className="font-medium text-lg mb-2">
-                      {rocket.name}
+            <div className="lg:col-span-2">
+              <Typography variant="h2" className="text-xl font-semibold mb-4 flex items-center gap-2">
+                <RocketIcon className="h-5 w-5 text-blue-600" />
+                Rocket Details
+              </Typography>
+              
+              <div className="space-y-6">
+                <div>
+                  <Typography variant="h3" className="font-medium text-xl mb-3 text-gray-900">
+                    {rocket.name}
+                  </Typography>
+                  {rocket.description && (
+                    <Typography variant="body2" className="text-gray-600 leading-relaxed">
+                      {rocket.description}
                     </Typography>
-                    {rocket.description && (
-                      <Typography variant="body2" className="text-gray-600 mb-4">
-                        {rocket.description}
-                      </Typography>
-                    )}
+                  )}
+                </div>
+
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                  <div className="border border-gray-300 p-4 rounded-lg">
+                    <div className="flex items-center gap-2 mb-2">
+                      <Ruler className="h-4 w-4 text-gray-600" />
+                      <div className="text-sm font-medium text-gray-700">Height</div>
+                    </div>
+                    <div className="text-lg font-semibold text-gray-900">{rocket.height?.meters}m</div>
                   </div>
 
-                  <div className="grid grid-cols-2 gap-4">
-                    <div className="flex items-center gap-2">
-                      <Ruler className="h-4 w-4 text-gray-500" />
-                      <div>
-                        <div className="text-sm font-medium">Height</div>
-                        <div className="text-sm text-gray-600">{rocket.height?.meters}m</div>
-                      </div>
+                  <div className="border border-gray-300 p-4 rounded-lg">
+                    <div className="flex items-center gap-2 mb-2">
+                      <Weight className="h-4 w-4 text-gray-600" />
+                      <div className="text-sm font-medium text-gray-700">Mass</div>
                     </div>
-
-                    <div className="flex items-center gap-2">
-                      <Weight className="h-4 w-4 text-gray-500" />
-                      <div>
-                        <div className="text-sm font-medium">Mass</div>
-                        <div className="text-sm text-gray-600">{Math.round(rocket.mass?.kg / 1000)}t</div>
-                      </div>
-                    </div>
-
-                    <div className="flex items-center gap-2">
-                      <Target className="h-4 w-4 text-gray-500" />
-                      <div>
-                        <div className="text-sm font-medium">Success Rate</div>
-                        <div className="text-sm text-gray-600">{rocket.success_rate_pct}%</div>
-                      </div>
-                    </div>
-
-                    {rocket.cost_per_launch && (
-                      <div className="flex items-center gap-2">
-                        <DollarSign className="h-4 w-4 text-gray-500" />
-                        <div>
-                          <div className="text-sm font-medium">Cost</div>
-                          <div className="text-sm text-gray-600">
-                            ${(rocket.cost_per_launch / 1000000).toFixed(0)}M
-                          </div>
-                        </div>
-                      </div>
-                    )}
+                    <div className="text-lg font-semibold text-gray-900">{Math.round(rocket.mass?.kg / 1000)}t</div>
                   </div>
 
-                  <div className="pt-4 border-t">
-                    <div className="grid grid-cols-3 gap-4 text-sm">
-                      <div>
-                        <div className="font-medium">Stages</div>
-                        <div className="text-gray-600">{rocket.stages}</div>
+                  <div className="border border-gray-300 p-4 rounded-lg">
+                    <div className="flex items-center gap-2 mb-2">
+                      <Target className="h-4 w-4 text-gray-600" />
+                      <div className="text-sm font-medium text-gray-700">Success Rate</div>
+                    </div>
+                    <div className="text-lg font-semibold text-gray-900">{rocket.success_rate_pct}%</div>
+                  </div>
+
+                  {rocket.cost_per_launch && (
+                    <div className="border border-gray-300 p-4 rounded-lg">
+                      <div className="flex items-center gap-2 mb-2">
+                        <DollarSign className="h-4 w-4 text-gray-600" />
+                        <div className="text-sm font-medium text-gray-700">Cost</div>
                       </div>
-                      <div>
-                        <div className="font-medium">Boosters</div>
-                        <div className="text-gray-600">{rocket.boosters}</div>
+                      <div className="text-lg font-semibold text-gray-900">
+                        ${(rocket.cost_per_launch / 1000000).toFixed(0)}M
                       </div>
-                      <div>
-                        <div className="font-medium">Active</div>
-                        <div className="text-gray-600">{formatBooleanValue(rocket.active)}</div>
-                      </div>
+                    </div>
+                  )}
+                </div>
+
+                <div className="pt-4 border-t border-gray-200">
+                  <div className="grid grid-cols-3 gap-4 text-sm">
+                    <div className="text-center p-3 border border-gray-300 rounded-lg">
+                      <div className="font-medium text-gray-700 mb-1">Stages</div>
+                      <div className="text-lg font-semibold text-gray-900">{rocket.stages}</div>
+                    </div>
+                    <div className="text-center p-3 border border-gray-300 rounded-lg">
+                      <div className="font-medium text-gray-700 mb-1">Boosters</div>
+                      <div className="text-lg font-semibold text-gray-900">{rocket.boosters}</div>
+                    </div>
+                    <div className="text-center p-3 border border-gray-300 rounded-lg">
+                      <div className="font-medium text-gray-700 mb-1">Active</div>
+                      <div className="text-lg font-semibold text-gray-900">{formatBooleanValue(rocket.active)}</div>
                     </div>
                   </div>
                 </div>
-              </CardContent>
-            </Card>
+              </div>
+            </div>
           )}
 
           {launchpad && (
-            <Card>
-              <CardContent className="p-6">
-                <Typography variant="h2" className="text-xl font-semibold mb-4 flex items-center gap-2">
-                  <MapPin className="h-5 w-5" />
-                  Launch Site
-                </Typography>
-                
-                <div className="space-y-4">
-                  <div>
-                    <Typography variant="h3" className="font-medium text-lg mb-2">
-                      {launchpad.name}
+            <div>
+              <Typography variant="h2" className="text-xl font-semibold mb-4 flex items-center gap-2">
+                <MapPin className="h-5 w-5 text-green-600" />
+                Launch Site
+              </Typography>
+              
+              <div className="space-y-4">
+                <div>
+                  <Typography variant="h3" className="font-medium text-lg mb-2 text-gray-900">
+                    {launchpad.name}
+                  </Typography>
+                  <div className="text-sm text-gray-600 mb-3 border border-gray-300 px-3 py-2 rounded-lg">
+                    {launchpad.locality}, {launchpad.region}
+                  </div>
+                  {launchpad.details && (
+                    <Typography variant="body2" className="text-gray-600 leading-relaxed">
+                      {launchpad.details}
                     </Typography>
-                    <div className="text-sm text-gray-600 mb-4">
-                      {launchpad.locality}, {launchpad.region}
-                    </div>
-                    {launchpad.details && (
-                      <Typography variant="body2" className="text-gray-600 mb-4">
-                        {launchpad.details}
-                      </Typography>
-                    )}
-                  </div>
+                  )}
+                </div>
 
-                  <div className="grid grid-cols-2 gap-4">
-                    <div>
-                      <div className="text-sm font-medium">Launch Attempts</div>
-                      <div className="text-sm text-gray-600">{launchpad.launch_attempts}</div>
-                    </div>
-                    <div>
-                      <div className="text-sm font-medium">Successful Launches</div>
-                      <div className="text-sm text-gray-600">{launchpad.launch_successes}</div>
-                    </div>
+                <div className="grid grid-cols-2 gap-3">
+                  <div className="border border-gray-300 p-3 rounded-lg text-center">
+                    <div className="text-sm font-medium text-gray-700 mb-1">Attempts</div>
+                    <div className="text-lg font-semibold text-gray-900">{launchpad.launch_attempts}</div>
                   </div>
-
-                  <div className="pt-4 border-t">
-                    <div className="text-sm">
-                      <div className="font-medium mb-1">Status</div>
-                      <div className="text-gray-600">{launchpad.status}</div>
-                    </div>
+                  <div className="border border-gray-300 p-3 rounded-lg text-center">
+                    <div className="text-sm font-medium text-gray-700 mb-1">Successes</div>
+                    <div className="text-lg font-semibold text-gray-900">{launchpad.launch_successes}</div>
                   </div>
                 </div>
-              </CardContent>
-            </Card>
+
+                <div className="pt-3 border-t border-gray-200">
+                  <div className="text-sm">
+                    <div className="font-medium mb-1 text-gray-700">Status</div>
+                    <Badge className="bg-gray-100 text-gray-800">
+                      {launchpad.status}
+                    </Badge>
+                  </div>
+                </div>
+              </div>
+            </div>
           )}
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-8">
-          {VALIDATION_CHECKS.hasCores(launch) && (
-            <Card>
-              <CardContent className="p-6">
-                <Typography variant="h2" className="text-xl font-semibold mb-4 flex items-center gap-2">
-                  <Settings className="h-5 w-5" />
-                  Core Information
-                </Typography>
-                
-                <div className="space-y-4">
+                  {VALIDATION_CHECKS.hasCores(launch) && (
+          <div>
+            <Typography variant="h2" className="text-xl font-semibold mb-4 flex items-center gap-2">
+              <Settings className="h-5 w-5" />
+              Core Information
+            </Typography>
+            
+            <div className="space-y-4">
                                           {launch.cores.map((core, index: number) => (
                     <div key={index} className="p-4 border border-gray-200 rounded-lg">
                       <div className="flex items-center justify-between mb-3">
@@ -632,389 +629,313 @@ export default function LaunchDetailPage({ params }: LaunchDetailPageProps) {
                     </div>
                   ))}
                 </div>
-              </CardContent>
-            </Card>
-          )}
-
-          <Card>
-            <CardContent className="p-6">
-              <Typography variant="h2" className="text-xl font-semibold mb-4 flex items-center gap-2">
-                <Activity className="h-5 w-5" />
-                Mission Timeline
-              </Typography>
-              
-              <div className="space-y-4">
-                <div className="flex items-center gap-3 p-3 bg-blue-50 rounded-lg">
-                  <Calendar className="h-5 w-5 text-blue-600" />
-                  <div>
-                    <div className="font-medium text-blue-900">Launch Date</div>
-                    <div className="text-sm text-blue-700">{formatDate(launch.date_utc)}</div>
-                  </div>
-                </div>
-                
-                <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
-                  <Timer className="h-5 w-5 text-gray-600" />
-                  <div>
-                    <div className="font-medium text-gray-900">Flight Number</div>
-                    <div className="text-sm text-gray-600">#{launch.flight_number}</div>
-                  </div>
-                </div>
-                
-                {launch.auto_update && (
-                  <div className="flex items-center gap-3 p-3 bg-amber-50 rounded-lg">
-                    <Radio className="h-5 w-5 text-amber-600" />
-                    <div>
-                      <div className="font-medium text-amber-900">Auto-Updated</div>
-                      <div className="text-sm text-amber-700">This launch data is automatically updated</div>
-                    </div>
-                  </div>
-                )}
-                
-                {launch.tbd && (
-                  <div className="flex items-center gap-3 p-3 bg-yellow-50 rounded-lg">
-                    <AlertTriangle className="h-5 w-5 text-yellow-600" />
-                    <div>
-                      <div className="font-medium text-yellow-900">Date TBD</div>
-                      <div className="text-sm text-yellow-700">Launch date to be determined</div>
-                    </div>
-                  </div>
-                )}
-              </div>
-            </CardContent>
-          </Card>
-        </div>
-
-        {VALIDATION_CHECKS.hasPayloads(launch) && (
-          <Card className="mt-8">
-            <CardContent className="p-6">
-              <Typography variant="h2" className="text-xl font-semibold mb-4 flex items-center gap-2">
-                <Orbit className="h-5 w-5" />
-                Payload Details
-              </Typography>
-              
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {launch.payloads.filter((payload): payload is Payload => typeof payload === 'object').map((payload, index: number) => (
-                  <div key={index} className="border border-gray-200 rounded-lg p-4">
-                    <div className="mb-4">
-                      <Typography variant="h3" className="font-medium text-lg mb-2">
-                        {payload.name || `Payload ${index + 1}`}
-                      </Typography>
-                      
-                      {payload.type && (
-                        <Badge className="bg-blue-100 text-blue-800">
-                          {payload.type}
-                        </Badge>
-                      )}
-                    </div>
-
-                    <div className="space-y-3">
-                      {payload.customers && payload.customers.length > 0 && (
-                        <div>
-                          <div className="text-sm font-medium text-gray-700 mb-1">Customer(s)</div>
-                          <div className="text-sm text-gray-600">
-                            {payload.customers.join(', ')}
-                          </div>
-                        </div>
-                      )}
-
-                      {payload.manufacturer && (
-                        <div>
-                          <div className="text-sm font-medium text-gray-700 mb-1">Manufacturer</div>
-                          <div className="text-sm text-gray-600">{payload.manufacturer}</div>
-                        </div>
-                      )}
-
-                      {payload.nationality && (
-                        <div>
-                          <div className="text-sm font-medium text-gray-700 mb-1">Nationality</div>
-                          <div className="text-sm text-gray-600">{payload.nationality}</div>
-                        </div>
-                      )}
-
-                      <div className="grid grid-cols-2 gap-4">
-                        {payload.mass_kg && (
-                          <div>
-                            <div className="text-sm font-medium text-gray-700 mb-1">Mass</div>
-                            <div className="text-sm text-gray-600">{payload.mass_kg} kg</div>
-                          </div>
-                        )}
-
-                        {payload.orbit && (
-                          <div>
-                            <div className="text-sm font-medium text-gray-700 mb-1">Orbit</div>
-                            <div className="text-sm text-gray-600">{payload.orbit}</div>
-                          </div>
-                        )}
-                      </div>
-
-                      {payload.periapsis_km && payload.apoapsis_km && (
-                        <div>
-                          <div className="text-sm font-medium text-gray-700 mb-1">Orbital Parameters</div>
-                          <div className="text-sm text-gray-600">
-                            Periapsis: {payload.periapsis_km} km • Apoapsis: {payload.apoapsis_km} km
-                          </div>
-                        </div>
-                      )}
-
-                      {payload.inclination_deg && (
-                        <div>
-                          <div className="text-sm font-medium text-gray-700 mb-1">Inclination</div>
-                          <div className="text-sm text-gray-600">{payload.inclination_deg}°</div>
-                        </div>
-                      )}
-
-                      {payload.lifespan_years && (
-                        <div>
-                          <div className="text-sm font-medium text-gray-700 mb-1">Mission Duration</div>
-                          <div className="text-sm text-gray-600">{payload.lifespan_years} years</div>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
+          </div>
         )}
 
-        {rocket && rocket.engines && (
-          <Card className="mt-8">
-            <CardContent className="p-6">
-              <Typography variant="h2" className="text-xl font-semibold mb-4 flex items-center gap-2">
-                <Thermometer className="h-5 w-5" />
-                Engine Specifications
-              </Typography>
-              
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <div className="p-4 bg-gray-50 rounded-lg">
-                  <div className="flex items-center gap-2 mb-2">
-                    <Settings className="h-4 w-4 text-gray-600" />
-                    <div className="font-medium">Engine Details</div>
-                  </div>
-                  <div className="space-y-2 text-sm">
-                    <div>Type: {rocket?.engines?.type}</div>
-                    <div>Version: {rocket?.engines?.version}</div>
-                    <div>Layout: {rocket?.engines?.layout}</div>
-                    <div>Count: {rocket?.engines?.number}</div>
-                  </div>
+          <div>
+            <Typography variant="h2" className="text-xl font-semibold mb-4 flex items-center gap-2">
+              <Activity className="h-5 w-5 text-purple-600" />
+              Mission Timeline
+            </Typography>
+            
+            <div className="space-y-4">
+              <div className="flex items-center gap-3 p-4 border border-gray-300 rounded-lg">
+                <div className="p-2 bg-gray-600 rounded-full">
+                  <Calendar className="h-5 w-5 text-white" />
                 </div>
-
-                <div className="p-4 bg-gray-50 rounded-lg">
-                  <div className="flex items-center gap-2 mb-2">
-                    <TrendingUp className="h-4 w-4 text-gray-600" />
-                    <div className="font-medium">Performance</div>
-                  </div>
-                  <div className="space-y-2 text-sm">
-                    <div>Thrust (Sea): {rocket?.engines?.thrust_sea_level?.kN} kN</div>
-                    <div>Thrust (Vacuum): {rocket?.engines?.thrust_vacuum?.kN} kN</div>
-                    <div>ISP (Sea): {rocket?.engines?.isp?.sea_level}s</div>
-                    <div>ISP (Vacuum): {rocket?.engines?.isp?.vacuum}s</div>
-                  </div>
-                </div>
-
-                <div className="p-4 bg-gray-50 rounded-lg">
-                  <div className="flex items-center gap-2 mb-2">
-                    <Fuel className="h-4 w-4 text-gray-600" />
-                    <div className="font-medium">Propellants</div>
-                  </div>
-                  <div className="space-y-2 text-sm">
-                    <div>Fuel: {rocket?.engines?.propellant_1}</div>
-                    <div>Oxidizer: {rocket?.engines?.propellant_2}</div>
-                    <div>T/W Ratio: {rocket?.engines?.thrust_to_weight}</div>
-                    <div>Max Loss: {rocket?.engines?.engine_loss_max}</div>
-                  </div>
+                <div>
+                  <div className="font-semibold text-gray-900">Launch Date</div>
+                  <div className="text-sm text-gray-700">{formatDate(launch.date_utc)}</div>
                 </div>
               </div>
-            </CardContent>
-          </Card>
+              
+              <div className="flex items-center gap-3 p-4 border border-gray-300 rounded-lg">
+                <div className="p-2 bg-gray-600 rounded-full">
+                  <Timer className="h-5 w-5 text-white" />
+                </div>
+                <div>
+                  <div className="font-semibold text-gray-900">Flight Number</div>
+                  <div className="text-lg font-bold text-gray-800">#{launch.flight_number}</div>
+                </div>
+              </div>
+              
+              {launch.auto_update && (
+                <div className="flex items-center gap-3 p-4 border border-gray-300 rounded-lg">
+                  <div className="p-2 bg-gray-600 rounded-full">
+                    <Radio className="h-5 w-5 text-white" />
+                  </div>
+                  <div>
+                    <div className="font-semibold text-gray-900">Auto-Updated</div>
+                    <div className="text-sm text-gray-700">This launch data is automatically updated</div>
+                  </div>
+                </div>
+              )}
+              
+              {launch.tbd && (
+                <div className="flex items-center gap-3 p-4 border border-gray-300 rounded-lg">
+                  <div className="p-2 bg-gray-600 rounded-full">
+                    <AlertTriangle className="h-5 w-5 text-white" />
+                  </div>
+                  <div>
+                    <div className="font-semibold text-gray-900">Date TBD</div>
+                    <div className="text-sm text-gray-700">Launch date to be determined</div>
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+
+
+
+        {rocket && rocket.engines && (
+          <div className="mt-8">
+            <Typography variant="h2" className="text-xl font-semibold mb-4 flex items-center gap-2">
+              <Thermometer className="h-5 w-5" />
+              Engine Specifications
+            </Typography>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              <div className="p-4 border border-gray-300 rounded-lg">
+                <div className="flex items-center gap-2 mb-2">
+                  <Settings className="h-4 w-4 text-gray-600" />
+                  <div className="font-medium">Engine Details</div>
+                </div>
+                <div className="space-y-2 text-sm">
+                  <div>Type: {rocket?.engines?.type}</div>
+                  <div>Version: {rocket?.engines?.version}</div>
+                  <div>Layout: {rocket?.engines?.layout}</div>
+                  <div>Count: {rocket?.engines?.number}</div>
+                </div>
+              </div>
+
+              <div className="p-4 border border-gray-300 rounded-lg">
+                <div className="flex items-center gap-2 mb-2">
+                  <TrendingUp className="h-4 w-4 text-gray-600" />
+                  <div className="font-medium">Performance</div>
+                </div>
+                <div className="space-y-2 text-sm">
+                  <div>Thrust (Sea): {rocket?.engines?.thrust_sea_level?.kN} kN</div>
+                  <div>Thrust (Vacuum): {rocket?.engines?.thrust_vacuum?.kN} kN</div>
+                  <div>ISP (Sea): {rocket?.engines?.isp?.sea_level}s</div>
+                  <div>ISP (Vacuum): {rocket?.engines?.isp?.vacuum}s</div>
+                </div>
+              </div>
+
+              <div className="p-4 border border-gray-300 rounded-lg">
+                <div className="flex items-center gap-2 mb-2">
+                  <Fuel className="h-4 w-4 text-gray-600" />
+                  <div className="font-medium">Propellants</div>
+                </div>
+                <div className="space-y-2 text-sm">
+                  <div>Fuel: {rocket?.engines?.propellant_1}</div>
+                  <div>Oxidizer: {rocket?.engines?.propellant_2}</div>
+                  <div>T/W Ratio: {rocket?.engines?.thrust_to_weight}</div>
+                  <div>Max Loss: {rocket?.engines?.engine_loss_max}</div>
+                </div>
+              </div>
+            </div>
+          </div>
         )}
 
         {rocket && (rocket.first_stage || rocket.second_stage) && (
-          <Card className="mt-8">
-            <CardContent className="p-6">
-              <Typography variant="h2" className="text-xl font-semibold mb-4 flex items-center gap-2">
-                <RocketIcon className="h-5 w-5" />
-                Stage Information
-              </Typography>
-              
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {rocket.first_stage && (
-                  <div className="border border-gray-200 rounded-lg p-4">
-                    <Typography variant="h3" className="font-medium mb-3 flex items-center gap-2">
-                      <Gauge className="h-4 w-4" />
-                      First Stage
-                    </Typography>
-                    
-                    <div className="space-y-3 text-sm">
-                      <div className="grid grid-cols-2 gap-4">
-                        <div>
-                          <div className="font-medium text-gray-700">Engines</div>
-                          <div className="text-gray-600">{rocket?.first_stage?.engines}</div>
-                        </div>
-                        <div>
-                          <div className="font-medium text-gray-700">Reusable</div>
-                          <div className="text-gray-600">{formatBooleanValue(rocket?.first_stage?.reusable)}</div>
-                        </div>
-                      </div>
-                      
-                      <div>
-                        <div className="font-medium text-gray-700">Thrust (Sea Level)</div>
-                        <div className="text-gray-600">{rocket?.first_stage?.thrust_sea_level?.kN} kN</div>
-                      </div>
-                      
-                      <div>
-                        <div className="font-medium text-gray-700">Thrust (Vacuum)</div>
-                        <div className="text-gray-600">{rocket?.first_stage?.thrust_vacuum?.kN} kN</div>
-                      </div>
-                      
-                      <div className="grid grid-cols-2 gap-4">
-                        <div>
-                          <div className="font-medium text-gray-700">Fuel Amount</div>
-                          <div className="text-gray-600">{rocket?.first_stage?.fuel_amount_tons}t</div>
-                        </div>
-                        <div>
-                          <div className="font-medium text-gray-700">Burn Time</div>
-                          <div className="text-gray-600">{rocket?.first_stage?.burn_time_sec}s</div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                )}
-
-                {rocket.second_stage && (
-                  <div className="border border-gray-200 rounded-lg p-4">
-                    <Typography variant="h3" className="font-medium mb-3 flex items-center gap-2">
-                      <Navigation className="h-4 w-4" />
-                      Second Stage
-                    </Typography>
-                    
-                    <div className="space-y-3 text-sm">
-                      <div className="grid grid-cols-2 gap-4">
-                        <div>
-                          <div className="font-medium text-gray-700">Engines</div>
-                          <div className="text-gray-600">{rocket?.second_stage?.engines}</div>
-                        </div>
-                        <div>
-                          <div className="font-medium text-gray-700">Reusable</div>
-                          <div className="text-gray-600">{formatBooleanValue(rocket?.second_stage?.reusable)}</div>
-                        </div>
-                      </div>
-                      
-                      <div>
-                        <div className="font-medium text-gray-700">Thrust</div>
-                        <div className="text-gray-600">{rocket?.second_stage?.thrust?.kN} kN</div>
-                      </div>
-                      
-                      <div className="grid grid-cols-2 gap-4">
-                        <div>
-                          <div className="font-medium text-gray-700">Fuel Amount</div>
-                          <div className="text-gray-600">{rocket?.second_stage?.fuel_amount_tons}t</div>
-                        </div>
-                        <div>
-                          <div className="font-medium text-gray-700">Burn Time</div>
-                          <div className="text-gray-600">{rocket?.second_stage?.burn_time_sec}s</div>
-                        </div>
-                      </div>
-
-                      {rocket?.second_stage?.payloads?.composite_fairing && (
-                        <div>
-                          <div className="font-medium text-gray-700 mb-1">Payload Fairing</div>
-                          <div className="text-gray-600">
-                            Height: {rocket?.second_stage?.payloads.composite_fairing.height?.meters}m • 
-                            Diameter: {rocket?.second_stage?.payloads.composite_fairing.diameter?.meters}m
-                          </div>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                )}
-              </div>
-            </CardContent>
-          </Card>
-        )}
-
-        <Card className="mt-8">
-          <CardContent className="p-6">
+          <div className="mt-8">
             <Typography variant="h2" className="text-xl font-semibold mb-4 flex items-center gap-2">
-              <Globe className="h-5 w-5" />
-              External Resources
+              <RocketIcon className="h-5 w-5" />
+              Stage Information
             </Typography>
             
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              {launch.links?.webcast && (
-                <Button asChild className="h-auto p-4 flex-col gap-2">
-                  <a href={launch.links?.webcast} target="_blank" rel="noopener noreferrer">
-                    <Play className="h-6 w-6" />
-                    <span className="text-sm">Watch Launch</span>
-                  </a>
-                </Button>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {rocket.first_stage && (
+                <div className="border border-gray-200 rounded-lg p-4">
+                  <Typography variant="h3" className="font-medium mb-3 flex items-center gap-2">
+                    <Gauge className="h-4 w-4" />
+                    First Stage
+                  </Typography>
+                  
+                  <div className="space-y-3 text-sm">
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <div className="font-medium text-gray-700">Engines</div>
+                        <div className="text-gray-600">{rocket?.first_stage?.engines}</div>
+                      </div>
+                      <div>
+                        <div className="font-medium text-gray-700">Reusable</div>
+                        <div className="text-gray-600">{formatBooleanValue(rocket?.first_stage?.reusable)}</div>
+                      </div>
+                    </div>
+                    
+                    <div>
+                      <div className="font-medium text-gray-700">Thrust (Sea Level)</div>
+                      <div className="text-gray-600">{rocket?.first_stage?.thrust_sea_level?.kN} kN</div>
+                    </div>
+                    
+                    <div>
+                      <div className="font-medium text-gray-700">Thrust (Vacuum)</div>
+                      <div className="text-gray-600">{rocket?.first_stage?.thrust_vacuum?.kN} kN</div>
+                    </div>
+                    
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <div className="font-medium text-gray-700">Fuel Amount</div>
+                        <div className="text-gray-600">{rocket?.first_stage?.fuel_amount_tons}t</div>
+                      </div>
+                      <div>
+                        <div className="font-medium text-gray-700">Burn Time</div>
+                        <div className="text-gray-600">{rocket?.first_stage?.burn_time_sec}s</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               )}
-              
-              {launch.links?.wikipedia && (
-                <Button variant="outline" asChild className="h-auto p-4 flex-col gap-2">
-                  <a href={launch.links?.wikipedia} target="_blank" rel="noopener noreferrer">
-                    <Globe className="h-6 w-6" />
-                    <span className="text-sm">Wikipedia</span>
-                  </a>
-                </Button>
-              )}
-              
-              {launch.links?.article && (
-                <Button variant="outline" asChild className="h-auto p-4 flex-col gap-2">
-                  <a href={launch.links?.article} target="_blank" rel="noopener noreferrer">
-                    <ExternalLink className="h-6 w-6" />
-                    <span className="text-sm">News Article</span>
-                  </a>
-                </Button>
-              )}
-              
-              {launch.links?.presskit && (
-                <Button variant="outline" asChild className="h-auto p-4 flex-col gap-2">
-                  <a href={launch.links?.presskit} target="_blank" rel="noopener noreferrer">
-                    <Building className="h-6 w-6" />
-                    <span className="text-sm">Press Kit</span>
-                  </a>
-                </Button>
+
+              {rocket.second_stage && (
+                <div className="border border-gray-200 rounded-lg p-4">
+                  <Typography variant="h3" className="font-medium mb-3 flex items-center gap-2">
+                    <Navigation className="h-4 w-4" />
+                    Second Stage
+                  </Typography>
+                  
+                  <div className="space-y-3 text-sm">
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <div className="font-medium text-gray-700">Engines</div>
+                        <div className="text-gray-600">{rocket?.second_stage?.engines}</div>
+                      </div>
+                      <div>
+                        <div className="font-medium text-gray-700">Reusable</div>
+                        <div className="text-gray-600">{formatBooleanValue(rocket?.second_stage?.reusable)}</div>
+                      </div>
+                    </div>
+                    
+                    <div>
+                      <div className="font-medium text-gray-700">Thrust</div>
+                      <div className="text-gray-600">{rocket?.second_stage?.thrust?.kN} kN</div>
+                    </div>
+                    
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <div className="font-medium text-gray-700">Fuel Amount</div>
+                        <div className="text-gray-600">{rocket?.second_stage?.fuel_amount_tons}t</div>
+                      </div>
+                      <div>
+                        <div className="font-medium text-gray-700">Burn Time</div>
+                        <div className="text-gray-600">{rocket?.second_stage?.burn_time_sec}s</div>
+                      </div>
+                    </div>
+
+                    {rocket?.second_stage?.payloads?.composite_fairing && (
+                      <div>
+                        <div className="font-medium text-gray-700 mb-1">Payload Fairing</div>
+                        <div className="text-gray-600">
+                          Height: {rocket?.second_stage?.payloads.composite_fairing.height?.meters}m • 
+                          Diameter: {rocket?.second_stage?.payloads.composite_fairing.diameter?.meters}m
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                </div>
               )}
             </div>
+          </div>
+        )}
 
-            {VALIDATION_CHECKS.hasRedditDiscussions(launch) && (
-              <div className="mt-6 pt-6 border-t border-gray-200">
-                <Typography variant="h3" className="font-medium mb-3">Reddit Discussions</Typography>
-                <div className="flex flex-wrap gap-2">
-                  {launch.links?.reddit.campaign && (
-                    <Button size="sm" variant="outline" asChild>
-                      <a href={launch.links?.reddit.campaign} target="_blank" rel="noopener noreferrer">
-                        Campaign
+        {(() => {
+          const hasWebcast = launch.links?.webcast;
+          const hasWikipedia = launch.links?.wikipedia;
+          const hasArticle = launch.links?.article;
+          const hasPresskit = launch.links?.presskit;
+          const hasReddit = VALIDATION_CHECKS.hasRedditDiscussions(launch);
+          
+          if (!hasWebcast && !hasWikipedia && !hasArticle && !hasPresskit && !hasReddit) {
+            return null;
+          }
+          
+          return (
+            <Card className="mt-8">
+              <CardContent className="p-6">
+                <Typography variant="h2" className="text-xl font-semibold mb-4 flex items-center gap-2">
+                  <Globe className="h-5 w-5 text-blue-600" />
+                  External Resources
+                </Typography>
+                
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                  {hasWebcast && (
+                    <Button asChild className="h-auto p-4 flex-col gap-2 bg-red-600 hover:bg-red-700 text-white">
+                      <a href={launch.links?.webcast || '#'} target="_blank" rel="noopener noreferrer">
+                        <Play className="h-6 w-6" />
+                        <span className="text-sm font-medium">Watch Launch</span>
                       </a>
                     </Button>
                   )}
-                  {launch.links?.reddit.launch && (
-                    <Button size="sm" variant="outline" asChild>
-                      <a href={launch.links?.reddit.launch} target="_blank" rel="noopener noreferrer">
-                        Launch Thread
+                  
+                  {hasWikipedia && (
+                    <Button variant="outline" asChild className="h-auto p-4 flex-col gap-2 border-blue-200 text-blue-700 hover:bg-blue-50">
+                      <a href={launch.links?.wikipedia || '#'} target="_blank" rel="noopener noreferrer">
+                        <Globe className="h-6 w-6" />
+                        <span className="text-sm font-medium">Wikipedia</span>
                       </a>
                     </Button>
                   )}
-                  {launch.links?.reddit.media && (
-                    <Button size="sm" variant="outline" asChild>
-                      <a href={launch.links?.reddit.media} target="_blank" rel="noopener noreferrer">
-                        Media
+                  
+                  {hasArticle && (
+                    <Button variant="outline" asChild className="h-auto p-4 flex-col gap-2 border-green-200 text-green-700 hover:bg-green-50">
+                      <a href={launch.links?.article || '#'} target="_blank" rel="noopener noreferrer">
+                        <ExternalLink className="h-6 w-6" />
+                        <span className="text-sm font-medium">News Article</span>
                       </a>
                     </Button>
                   )}
-                  {launch.links?.reddit.recovery && (
-                    <Button size="sm" variant="outline" asChild>
-                      <a href={launch.links?.reddit.recovery} target="_blank" rel="noopener noreferrer">
-                        Recovery
+                  
+                  {hasPresskit && (
+                    <Button variant="outline" asChild className="h-auto p-4 flex-col gap-2 border-purple-200 text-purple-700 hover:bg-purple-50">
+                      <a href={launch.links?.presskit || '#'} target="_blank" rel="noopener noreferrer">
+                        <Building className="h-6 w-6" />
+                        <span className="text-sm font-medium">Press Kit</span>
                       </a>
                     </Button>
                   )}
                 </div>
-              </div>
-            )}
-          </CardContent>
-        </Card>
+
+                {hasReddit && (
+                  <div className="mt-6 pt-6 border-t border-gray-200">
+                    <Typography variant="h3" className="font-medium mb-3 text-gray-900">Reddit Discussions</Typography>
+                    <div className="flex flex-wrap gap-2">
+                      {launch.links?.reddit.campaign && (
+                        <Button size="sm" variant="outline" asChild className="border-orange-200 text-orange-700 hover:bg-orange-50">
+                          <a href={launch.links?.reddit.campaign} target="_blank" rel="noopener noreferrer">
+                            Campaign
+                          </a>
+                        </Button>
+                      )}
+                      {launch.links?.reddit.launch && (
+                        <Button size="sm" variant="outline" asChild className="border-orange-200 text-orange-700 hover:bg-orange-50">
+                          <a href={launch.links?.reddit.launch} target="_blank" rel="noopener noreferrer">
+                            Launch Thread
+                          </a>
+                        </Button>
+                      )}
+                      {launch.links?.reddit.media && (
+                        <Button size="sm" variant="outline" asChild className="border-orange-200 text-orange-700 hover:bg-orange-50">
+                          <a href={launch.links?.reddit.media} target="_blank" rel="noopener noreferrer">
+                            Media
+                          </a>
+                        </Button>
+                      )}
+                      {launch.links?.reddit.recovery && (
+                        <Button size="sm" variant="outline" asChild className="border-orange-200 text-orange-700 hover:bg-orange-50">
+                          <a href={launch.links?.reddit.recovery} target="_blank" rel="noopener noreferrer">
+                            Recovery
+                          </a>
+                        </Button>
+                      )}
+                    </div>
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+          );
+        })()}
       </div>
     </div>
   );
